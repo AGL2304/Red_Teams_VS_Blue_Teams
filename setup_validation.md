@@ -16,11 +16,11 @@
 
 | Paramètre | Valeur cible | Valeur réelle | Statut |
 |-----------|-------------|---------------|--------|
-| Hyperviseur | VMware / VirtualBox / KVM | [à compléter] | ☐ |
-| Distribution | Kali Linux 2024.x | [à compléter] | ☐ |
-| RAM allouée | ≥ 6 Go (ELK Stack) | [à compléter] | ☐ |
-| CPU alloués | ≥ 2 cœurs | [à compléter] | ☐ |
-| Espace disque | ≥ 40 Go | [à compléter] | ☐ |
+| Hyperviseur | VMware / VirtualBox / KVM | Virtualbox |  |
+| Distribution | Kali Linux 2024.x | Kali Linux 2025.4 |  |
+| RAM allouée | ≥ 6 Go (ELK Stack) | 19 Go  |  |
+| CPU alloués | ≥ 2 cœurs | 4cœurs |  |
+| Espace disque | ≥ 40 Go | 47 Go |  |
 
 **Commande de vérification :**
 ```bash
