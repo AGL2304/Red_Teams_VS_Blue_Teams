@@ -1,0 +1,28 @@
+[
+  {
+    "id": "ALERT-20260413140559",
+    "timestamp": "2026-04-13T14:05:59.339311",
+    "attack_type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "cvss_score": 9.8,
+    "mitre_technique": "T1190 - Exploit Public-Facing Application",
+    "occurrences": 9,
+    "source_ip": "unknown",
+    "details": "9 occurrences détectées dans les 5 dernières minutes",
+    "status": "OPEN",
+    "remediation": "1. Utiliser des requêtes paramétrées (prepared statements)\n2. Valider et assainir tous les inputs utilisateur\n3. Appliquer le principe du moindre privilège sur la DB\n4. Activer un WAF avec règles anti-SQLi"
+  },
+  {
+    "id": "ALERT-20260413140559",
+    "timestamp": "2026-04-13T14:05:59.345389",
+    "attack_type": "BRUTE_FORCE",
+    "severity": "MEDIUM",
+    "cvss_score": 6.5,
+    "mitre_technique": "T1110 - Brute Force",
+    "occurrences": 6,
+    "source_ip": "unknown",
+    "details": "6 occurrences détectées dans les 5 dernières minutes",
+    "status": "OPEN",
+    "remediation": "1. Implémenter un rate limiting sur les endpoints auth\n2. Activer le verrouillage de compte après N tentatives\n3. Mettre en place le MFA (Multi-Factor Authentication)\n4. Bloquer les IPs suspectes via fail2ban ou WAF"
+  }
+]
