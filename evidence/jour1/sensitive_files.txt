@@ -1,0 +1,14 @@
+=== php.ini ===
+; This file attempts to overwrite the original php.ini file. Doesnt always work.
+
+magic_quotes_gpc = Off
+allow_url_fopen on
+allow_url_include on=== .gitignore ===
+config/config.inc.php
+Dockerfile
+
+# Vim swap files
+.*swp
+=== robots.txt ===
+User-agent: *
+Disallow: /

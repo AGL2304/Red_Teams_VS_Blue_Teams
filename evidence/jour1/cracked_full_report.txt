@@ -1,0 +1,12 @@
+EMAIL,ROLE,HASH_MD5,MOT_DE_PASSE
+admin@juice-sh.op,admin,0192023a7bbd73250516f069df18b500,admin123
+jim@juice-sh.op,customer,e541ca7ecf72b8d1286474fc613e5e45,
+bender@juice-sh.op,customer,0c36e517e3fa95aabf1bbffc6744a4ef,ncc-1701
+bjoern.kimminich@gmail.com,admin,6edd9d726cbdc873c539e41ae8757b8c,
+ciso@juice-sh.op,deluxe,861917d5fa5f1172f931dc700d81a8fb,
+support@juice-sh.op,admin,3869433d74e3d0c86fd25562f836bc82,
+morty@juice-sh.op,customer,f2f933d0bb0ba057bc8e33b8ebd6d9e8,private
+J12934@juice-sh.op,admin,3c2abc04e4a6ea8f1327d0aae3714b7d,
+wurstbrot@juice-sh.op,admin,9ad5b0492bbe528583e128d2a8941de4,
+demo,customer,fe01ce2a7fbac8fafaed7c982a04e229,demo
+testing@juice-sh.op,admin,b616a64605a07941fbd31868aea3b54b,

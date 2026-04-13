@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+ <title>Nikto Report</title>
+ <style type="text/css">
+  .dataTable
+  {
+   font-family: tahoma, sans-serif;
+   font-size: 11pt; 
+   font-weight: normal; 
+   color: #000066;
+   background: #EEEEEE;
+   border: thin solid black;
+   width: 95%;
+  }
+  .headerTable
+  {
+   font-family: tahoma, sans-serif;
+   font-size: 15pt; 
+   font-weight: normal; 
+   color: white;
+   background: #000066;
+   border: thin solid black;
+   width: 300px;
+  }
+  .column-head
+  {
+   width: 15em;
+   font-weight:bold;
+   vertical-align: top;
+  }
+  .copyright
+  {
+   font-family: tahoma, sans-serif;
+   font-size: 10pt;
+   font-weight: normal;
+   font-style: italic;
+   color: black;
+  }
+  body
+  {
+   background: white;
+  }
+ </style>
+</head>
+<body>
+<div>
+<a name="1"></a>
+<table class="headerTable">
+ <tr>
+   <td>localhost / 127.0.0.1 port 8080</td>
+ </tr>
+</table>
+<table class="dataTable">
+ <tr>
+   <td class="column-head">Target IP</td>
+   <td>127.0.0.1</td>
+ </tr>
+ <tr>
+   <td class="column-head">Target hostname</td>
+   <td>localhost</td>
+ </tr>
+  <tr>
+   <td class="column-head">Target Port</td>
+   <td>8080</td>
+ </tr>
+  <tr>
+   <td class="column-head">HTTP Server</td>
+   <td>Apache/2.4.25 (Debian)</td>
+ </tr>
+ <tr>
+   <td class="column-head">Site Link (Name)</td>
+   <td><a href="http://localhost:8080">http://localhost:8080</a></td>
+ </tr>
+ <tr>
+   <td class="column-head">Site Link (IP)</td>
+   <td><a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a></td>
+ </tr>
+
+
+
+
+
+ </table>
+</div>
+<p></p>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Cookie PHPSESSID created without the httponly flag.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Cookie security created without the httponly flag.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>HEAD</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>Apache/2.4.25 appears to be outdated (current is at least 2.4.66).</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: x-content-type-options.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: referrer-policy.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: content-security-policy.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP'>https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: permissions-policy.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: strict-transport-security.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/config/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/config/: Directory indexing found.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/config/">http://localhost:8080/config/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/config/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/config/: Configuration information may be available remotely.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/config/">http://localhost:8080/config/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/docs/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/docs/: Directory indexing found.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/docs/">http://localhost:8080/docs/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/icons/README</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/icons/README: Apache default file found.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/icons/README">http://localhost:8080/icons/README</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://www.vntweb.co.uk/apache-restricting-access-to-iconsreadme/'>https://www.vntweb.co.uk/apache-restricting-access-to-iconsreadme/</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/login.php</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/login.php: Admin login page/section found.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/login.php">http://localhost:8080/login.php</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.gitignore</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.gitignore: .gitignore file found. It is possible to grasp the directory structure.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/.gitignore">http://localhost:8080/.gitignore</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: X-Frame-Options header is deprecated and was replaced with the Content-Security-Policy HTTP header with the frame-ancestors directive.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:8080/">http://localhost:8080/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/'>https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/</a></td>
+  </tr>
+</table>
+
+<div>
+<p></p>
+<table class="headerTable">
+ <tr>
+  <td>Host Summary</td>
+ </tr>
+</table>
+<table  class="dataTable">
+ <tr>
+  <td class="column-head">Start Time</td>
+  <td>2026-04-13 14:07:13</td>
+ </tr>
+ <tr>
+  <td class="column-head">End Time</td>
+  <td>2026-04-13 14:13:01</td>
+ </tr>
+ <tr>
+  <td class="column-head">Elapsed Time</td>
+  <td>348 seconds</td>
+ </tr>
+ <tr>
+  <td class="column-head">Statistics</td>
+  <td>7799 requests, 16 errors, 16 findings</td>
+ </tr>
+</table>
+</div>
+<p></p>
+
+<p></p>
+<table class="headerTable">
+  <tr>
+    <td>Scan Summary</td>
+  </tr>
+</table>
+<table class="dataTable">
+  <tr>
+    <td class="column-head">Software Details</td>
+    <td><a href="http://cirt.net/">Nikto 2.6.0</a></td>
+  <tr>
+    <td class="column-head">CLI Options</td>
+    <td>-h http://localhost:8080 -output evidence/jour1/nikto_baseline.html -Format htm</td>
+  </tr>
+  <tr>
+    <td class="column-head">Hosts Tested</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td class="column-head">Start Time</td>
+    <td>Mon Apr 13 14:07:04 2026</td>
+  </tr>
+  <tr>
+    <td class="column-head">End Time</td>
+    <td>Mon Apr 13 14:13:01 2026</td>
+  </tr>
+  <tr>
+    <td class="column-head">Elapsed Time</td>
+    <td>357 seconds</td>
+  </tr>
+</table>
+<p></p>
+<p class="copyright">&copy; 2008 Chris Sullo</p>
+
+<!-- (c) 2008 Chris Sullo -->
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+ <title>Nikto Report</title>
+ <style type="text/css">
+  .dataTable
+  {
+   font-family: tahoma, sans-serif;
+   font-size: 11pt; 
+   font-weight: normal; 
+   color: #000066;
+   background: #EEEEEE;
+   border: thin solid black;
+   width: 95%;
+  }
+  .headerTable
+  {
+   font-family: tahoma, sans-serif;
+   font-size: 15pt; 
+   font-weight: normal; 
+   color: white;
+   background: #000066;
+   border: thin solid black;
+   width: 300px;
+  }
+  .column-head
+  {
+   width: 15em;
+   font-weight:bold;
+   vertical-align: top;
+  }
+  .copyright
+  {
+   font-family: tahoma, sans-serif;
+   font-size: 10pt;
+   font-weight: normal;
+   font-style: italic;
+   color: black;
+  }
+  body
+  {
+   background: white;
+  }
+ </style>
+</head>
+<body>
+<div>
+<a name="1"></a>
+<table class="headerTable">
+ <tr>
+   <td>localhost / 127.0.0.1 port 3000</td>
+ </tr>
+</table>
+<table class="dataTable">
+ <tr>
+   <td class="column-head">Target IP</td>
+   <td>127.0.0.1</td>
+ </tr>
+ <tr>
+   <td class="column-head">Target hostname</td>
+   <td>localhost</td>
+ </tr>
+  <tr>
+   <td class="column-head">Target Port</td>
+   <td>3000</td>
+ </tr>
+  <tr>
+   <td class="column-head">HTTP Server</td>
+   <td></td>
+ </tr>
+ <tr>
+   <td class="column-head">Site Link (Name)</td>
+   <td><a href="http://localhost:3000">http://localhost:3000</a></td>
+ </tr>
+ <tr>
+   <td class="column-head">Site Link (IP)</td>
+   <td><a href="http://127.0.0.1:3000/">http://127.0.0.1:3000/</a></td>
+ </tr>
+
+
+
+
+
+ </table>
+</div>
+<p></p>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Retrieved access-control-allow-origin header: *.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Uncommon header(s) &#x27;x-recruiting&#x27; found, with contents: /#/jobs.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/robots.txt</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/robots.txt: contains 1 entry which should be manually viewed.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/robots.txt">http://localhost:3000/robots.txt</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Glossary/Robots.txt'>https://developer.mozilla.org/en-US/docs/Glossary/Robots.txt</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: permissions-policy.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: referrer-policy.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: content-security-policy.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP'>https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: Suggested security header missing: strict-transport-security.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security'>https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.psql_history</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.psql_history: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/.psql_history">http://localhost:3000/.psql_history</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/ftp/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/ftp/: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/ftp/">http://localhost:3000/ftp/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/public/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/public/: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/public/">http://localhost:3000/public/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.htpasswd</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.htpasswd: Contains authorization information.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/.htpasswd">http://localhost:3000/.htpasswd</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.bash_history</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.bash_history: A user&#x27;s home directory may be set to the web root, the shell history was retrieved. This should not be accessible via the web.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/.bash_history">http://localhost:3000/.bash_history</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.mysql_history</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.mysql_history: Database SQL?.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/.mysql_history">http://localhost:3000/.mysql_history</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.sh_history</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.sh_history: A user&#x27;s home directory may be set to the web root, the shell history was retrieved. This should not be accessible via the web.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/.sh_history">http://localhost:3000/.sh_history</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/.sqlite_history</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/.sqlite_history: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/.sqlite_history">http://localhost:3000/.sqlite_history</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/userdata.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/userdata.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/userdata.json">http://localhost:3000/userdata.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/login.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/login.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/login.json">http://localhost:3000/login.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/master.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/master.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/master.json">http://localhost:3000/master.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/masters.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/masters.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/masters.json">http://localhost:3000/masters.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/connections.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/connections.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/connections.json">http://localhost:3000/connections.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/connection.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/connection.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/connection.json">http://localhost:3000/connection.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/PasswordsData.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/PasswordsData.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/PasswordsData.json">http://localhost:3000/PasswordsData.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/users.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/users.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/users.json">http://localhost:3000/users.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/conndb.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/conndb.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/conndb.json">http://localhost:3000/conndb.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/conn.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/conn.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/conn.json">http://localhost:3000/conn.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/accounts.json</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/accounts.json: This might be interesting.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/accounts.json">http://localhost:3000/accounts.json</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/JAMonAdmin.jsp</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/JAMonAdmin.jsp: JAMon - Java Application Monitor Admin interface identified. Versions 2.7 and earlier contain XSS vulnerabilities.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/JAMonAdmin.jsp">http://localhost:3000/JAMonAdmin.jsp</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-6235'>CVE-2013-6235</a></td>
+  </tr>
+</table>
+
+<table class="dataTable">
+  <tr>
+    <td class="column-head">URI</td>
+    <td>/</td>
+  </tr>
+  <tr>
+    <td class="column-head">HTTP Method</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td class="column-head">Description</td>
+    <td>/: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type.</td>
+  </tr>
+  <tr>
+    <td class="column-head">Link</td>
+    <td>
+      <a href="http://localhost:3000/">http://localhost:3000/</a><br>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="column-head">Reference(s)</td>
+    <td><a href='https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/'>https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/</a></td>
+  </tr>
+</table>
+
+<div>
+<p></p>
+<table class="headerTable">
+ <tr>
+  <td>Host Summary</td>
+ </tr>
+</table>
+<table  class="dataTable">
+ <tr>
+  <td class="column-head">Start Time</td>
+  <td>2026-04-13 14:14:11</td>
+ </tr>
+ <tr>
+  <td class="column-head">End Time</td>
+  <td>2026-04-13 14:20:54</td>
+ </tr>
+ <tr>
+  <td class="column-head">Elapsed Time</td>
+  <td>403 seconds</td>
+ </tr>
+ <tr>
+  <td class="column-head">Statistics</td>
+  <td>8637 requests, 2 errors, 28 findings</td>
+ </tr>
+</table>
+</div>
+<p></p>
+
+<p></p>
+<table class="headerTable">
+  <tr>
+    <td>Scan Summary</td>
+  </tr>
+</table>
+<table class="dataTable">
+  <tr>
+    <td class="column-head">Software Details</td>
+    <td><a href="http://cirt.net/">Nikto 2.6.0</a></td>
+  <tr>
+    <td class="column-head">CLI Options</td>
+    <td>-h http://localhost:3000 -output evidence/jour1/nikto_baseline.html -Format htm</td>
+  </tr>
+  <tr>
+    <td class="column-head">Hosts Tested</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td class="column-head">Start Time</td>
+    <td>Mon Apr 13 14:14:02 2026</td>
+  </tr>
+  <tr>
+    <td class="column-head">End Time</td>
+    <td>Mon Apr 13 14:20:54 2026</td>
+  </tr>
+  <tr>
+    <td class="column-head">Elapsed Time</td>
+    <td>412 seconds</td>
+  </tr>
+</table>
+<p></p>
+<p class="copyright">&copy; 2008 Chris Sullo</p>
+
+<!-- (c) 2008 Chris Sullo -->
+
+</body>
+</html>
+
