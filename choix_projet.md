@@ -1,7 +1,7 @@
 # Choix de Projet – M1PPAW
-**Groupe :** [Nom du groupe]  
+**Groupe :** Purple Team  
 **Date :** 13 avril 2026  
-**Référent pédagogique :** [Nom du formateur]
+**Encadrant :**  Jean-Louis Feuvrier LEWENDOWSKI  
 
 ---
 
@@ -13,13 +13,13 @@
 
 ## 2. Arguments Techniques Justifiant le Choix
 
-### Argument 1 – Couverture complète de l'OWASP Top 10
-L'application SecureShop est conçue pour embarquer des vulnérabilités intentionnelles couvrant les dix catégories de l'OWASP Top 10 (SQLi, XSS, CSRF, IDOR, file upload, etc.). Cela permet d'aborder de façon systématique et exhaustive les classes de vulnérabilités les plus répandues en entreprise, dans un cadre pédagogique contrôlé.
+### Argument 1 : Couverture complète de l'OWASP Top 10
+L'application SecureShop est conçue pour embarquer des vulnérabilités intentionnelles couvrant les dix catégories de l'OWASP Top 10 (SQLi, XSS, CSRF, IDOR, file upload, etc.). Il permet d'aborder de façon systématique et exhaustive les classes de vulnérabilités les plus répandues en entreprise.
 
-### Argument 2 – Approche Purple Team (attaque + défense)
-Contrairement aux projets 1 et 3, ce projet couvre les deux facettes du métier de cybersécurité : la phase offensive (exploitation, chaining de vulnérabilités) **et** la phase défensive (déploiement d'un WAF, mise en place d'un SIEM avec la stack ELK, threat hunting). Cette dualité correspond directement aux profils "Purple Team" très demandés sur le marché (+60 % de demande selon les chiffres du module).
+### Argument 2 : Approche Purple Team (attaque + défense)
+Contrairement aux projets 1 et 3, ce projet couvre les deux facettes du métier de cybersécurité : la phase offensive (exploitation, chaining de vulnérabilités) **et** la phase défensive (déploiement d'un WAF, mise en place d'un SIEM avec la stack ELK, threat hunting). Cette dualité correspond directement aux profils "Purple Team" très demandés sur le marché.
 
-### Argument 3 – Pertinence des outils avec l'écosystème professionnel
+### Argument 3 : Pertinence des outils avec l'écosystème professionnel
 Les outils mobilisés (Burp Suite, SQLMap, Nikto, ELK Stack, Suricata) sont les standards de l'industrie. Ils sont utilisés quotidiennement dans les ESN de pentest, les équipes SOC et les cellules Purple Team. Cette mission constitue donc une préparation directe aux missions en entreprise et aux certifications GWAPT/eCPPT.
 
 ---
@@ -54,7 +54,7 @@ Les outils mobilisés (Burp Suite, SQLMap, Nikto, ELK Stack, Suricata) sont les 
 - **Chaining de vulnérabilités** : Combiner plusieurs vulnérabilités pour escalader les privilèges (technique avancée, temps d'apprentissage prévu en J3)
 - **Bypass de WAF** : Techniques d'encodage, obfuscation de payloads (à étudier en parallèle des tests)
 
-> **Stratégie compensatoire :** Planifier 1h de recherche documentaire (PortSwigger Academy, OWASP Testing Guide) chaque matin avant les TPs pour combler ces lacunes au fil de l'eau.
+
 
 ---
 
@@ -70,4 +70,4 @@ Les outils mobilisés (Burp Suite, SQLMap, Nikto, ELK Stack, Suricata) sont les 
 
 ---
 
-*Document rédigé dans le cadre du module M1PPAW – École IT*
+Purple Team - École IT
