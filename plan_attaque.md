@@ -1,12 +1,12 @@
 # Plan d'Attaque – Mission Audit SecureShop
-**Type de document :** Statement of Work (SOW) – Usage interne  
-**Groupe :** [Nom du groupe]  
+**Type de document :** Statement of Work (SOW)  / Plan d'Attaque  
+**Groupe :** Purple Team  
 **Client fictif :** SecureShop SAS  
 **Commanditaire :** RSSI / Direction Technique  
-**Consultant(s) :** [Noms des membres du groupe]  
+**Consultant(s) :** ANANI Georges Lionel, KOUAME Marc, Oubenazha Rachid & Sellak Mohamed
 **Date de mission :** 13 – 17 avril 2026 (5 jours)  
 **Budget simulé :** 15 000 € (3 000 €/jour)  
-**Cadre légal :** Mission réalisée dans un environnement isolé et fictif – données simulées
+**Cadre légal :** Mission réalisée dans un environnement isolé et fictif 
 
 ---
 
@@ -31,7 +31,7 @@ La méthodologie appliquée s'appuie sur le **PTES (Penetration Testing Executio
 | Base de données | MySQL/PostgreSQL embarquée dans Docker | Via SQLi / accès conteneur |
 | Interface d'administration | Panneau admin intentionnellement exposé | `http://localhost:8080/admin/` |
 
-### 2.2 IN SCOPE – Tests Autorisés
+### 2.2 IN SCOPE : Tests Autorisés
 
 - Tests de toutes les fonctionnalités accessibles via navigateur (authentification, recherche, panier, commande, profil utilisateur, administration)
 - Injection SQL (manuelle et automatisée avec SQLMap)
@@ -44,13 +44,13 @@ La méthodologie appliquée s'appuie sur le **PTES (Penetration Testing Executio
 - Injection de commandes (si présent)
 - Analyse des logs et déploiement de contre-mesures Blue Team
 
-### 2.3 OUT OF SCOPE – Lignes Rouges
+### 2.3 OUT OF SCOPE : Lignes Rouges
 
-- ❌ Attaques en dehors de la VM (aucun accès réseau externe)
-- ❌ Déni de Service (DoS / DDoS) – interdit même en local
-- ❌ Modification des données persistantes sans snapshot préalable
-- ❌ Accès à des systèmes autres que SecureShop
-- ❌ Tests sur des vrais systèmes ou données personnelles réelles
+- Attaques en dehors de la VM (aucun accès réseau externe)
+- Déni de Service (DoS / DDoS) – interdit même en local
+- Modification des données persistantes sans snapshot préalable
+- Accès à des systèmes autres que SecureShop
+- Tests sur des vrais systèmes ou données personnelles réelles
 
 ### 2.4 Hypothèses et Contraintes
 
@@ -87,7 +87,7 @@ curl http://localhost:8080/robots.txt
 
 **Critères de succès :**
 - Cartographie complète : liste de toutes les routes et formulaires
-- Stack technique identifiée (ex : PHP 8.x, MySQL 5.7, Apache 2.4)
+- Stack technique identifiée
 - Minimum 3 pistes d'attaque documentées
 
 **Temps estimé :** 2h  
@@ -328,5 +328,4 @@ curl http://localhost:9200/_cat/indices
 
 ---
 
-*Document rédigé dans le cadre du module M1PPAW – École IT*  
-*Ce document est un exercice pédagogique. Les tests sont réalisés dans un environnement isolé sur des cibles fictives.*
+Purple Team - École IT

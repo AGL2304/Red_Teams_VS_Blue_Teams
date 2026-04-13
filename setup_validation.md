@@ -1,7 +1,7 @@
 # Setup & Validation Environnement – M1PPAW Projet 2
-**Groupe :** [Nom du groupe]  
+**Groupe :** Purple Team  
 **Date :** 13 avril 2026  
-**Projet :** Red Team vs Blue Team – SecureShop
+**Projet :** Red Team vs Blue Team: SecureShop
 
 ---
 
@@ -183,4 +183,4 @@ ls -la ~/projet_m1ppaw/
 
 ---
 
-*Document rédigé dans le cadre du module M1PPAW – École IT*
+Purple Team - École IT
