@@ -1,0 +1,21 @@
+=== TEST BRUTE FORCE (rate limiting ?) ===
+Tentative 1 : HTTP 401
+Tentative 2 : HTTP 401
+Tentative 3 : HTTP 401
+Tentative 4 : HTTP 401
+Tentative 5 : HTTP 401
+Tentative 6 : HTTP 401
+Tentative 7 : HTTP 401
+Tentative 8 : HTTP 401
+Tentative 9 : HTTP 401
+Tentative 10 : HTTP 401
+Tentative 1 : HTTP 200
+Tentative 2 : HTTP 200
+Tentative 3 : HTTP 200
+Tentative 4 : HTTP 200
+Tentative 5 : HTTP 200
+Tentative 6 : HTTP 200
+Tentative 7 : HTTP 200
+Tentative 8 : HTTP 200
+Tentative 9 : HTTP 200
+Tentative 10 : HTTP 200

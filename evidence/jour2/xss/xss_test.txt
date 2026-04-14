@@ -1,0 +1,2 @@
+=== TEST XSS REFLECTED ===
+{"status":"success","data":[]}

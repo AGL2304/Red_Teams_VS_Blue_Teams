@@ -1,0 +1,21 @@
+--- IDOR : accès panier utilisateur 1 avec token bender ---
+Basket 1 → HTTP 401 | <html>
+  <head>
+    <meta charset='utf-8'> 
+    <title>UnauthorizedError: Format is Authorization: B
+Basket 2 → HTTP 401 | <html>
+  <head>
+    <meta charset='utf-8'> 
+    <title>UnauthorizedError: Format is Authorization: B
+Basket 3 → HTTP 401 | <html>
+  <head>
+    <meta charset='utf-8'> 
+    <title>UnauthorizedError: Format is Authorization: B
+Basket 4 → HTTP 401 | <html>
+  <head>
+    <meta charset='utf-8'> 
+    <title>UnauthorizedError: Format is Authorization: B
+Basket 5 → HTTP 401 | <html>
+  <head>
+    <meta charset='utf-8'> 
+    <title>UnauthorizedError: Format is Authorization: B

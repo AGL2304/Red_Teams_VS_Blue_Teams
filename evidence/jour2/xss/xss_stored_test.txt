@@ -1,0 +1,4 @@
+=== TEST XSS STORED (reviews produit) ===
+{
+    "status": "success"
+}

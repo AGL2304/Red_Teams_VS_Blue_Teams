@@ -1,0 +1,23 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "message": "One of my favorites!",
+            "author": "admin@juice-sh.op",
+            "product": 1,
+            "likesCount": 0,
+            "likedBy": [],
+            "_id": "WHPd8Wzn3i7WBQ3oN",
+            "liked": true
+        },
+        {
+            "product": "1",
+            "message": "<script>alert(\"XSS_STORED\")</script>",
+            "author": "attacker",
+            "likesCount": 0,
+            "likedBy": [],
+            "_id": "56hkRzqQsDY9cXGuW",
+            "liked": true
+        }
+    ]
+}

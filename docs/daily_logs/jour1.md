@@ -103,3 +103,23 @@ curl -I http://localhost:8080
 | Documentation | 30min |
 | **Total** | **4h** |
 
+
+---
+
+## PRIORITÉS JOUR 2
+
+### Red Team (matin — 4h)
+| Priorité | Test | Endpoint | Outil |
+|----------|------|----------|-------|
+| 1 | XSS Stored | /api/Products reviews | Burp Suite |
+| 2 | XSS Reflected | /rest/products/search | curl |
+| 3 | CSRF | /api/Users changement email | Python |
+| 4 | File Upload → webshell | /profile image upload | Burp |
+| 5 | IDOR | /api/BasketItems /api/Orders | curl |
+
+### Exploit Chain (après-midi — 2h)
+- XSS → vol JWT
+- JWT → accès API
+- IDOR → accès autres comptes
+- Exfiltration données
+
