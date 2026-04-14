@@ -255,8 +255,45 @@ Ces vulnérabilités offrent des opportunités d’exploitation significatives e
 
 ---
 
-## 13. Prochaines étapes
+## 13. Découverte d'un endpoint administratif sensible
 
-Les étapes suivantes consisteront à analyser les endpoints backend, notamment /rest, afin d’identifier des vulnérabilités liées à l’authentification, au contrôle d’accès et à la gestion des données.
+### Endpoint identifié
+
+Un endpoint administratif sensible a été identifié :
+
+```
+/rest/admin/application-configuration
+```
+
+### Analyse du contrôle d'accès
+
+Ce dernier est accessible sans authentification ni contrôle d'accès approprié.
+
+### Données exposées
+
+L'appel à cet endpoint retourne la configuration complète de l'application, incluant :
+
+* Paramètres internes du serveur
+* URLs et environnements de développement
+* Identifiants liés à des services externes (OAuth)
+* Données sensibles liées aux utilisateurs (ex : réponses à des questions de sécurité)
+
+### Impact
+
+Un attaquant non authentifié peut accéder à des informations critiques, facilitant :
+
+* La cartographie de l'infrastructure
+* L'exploitation d'autres vulnérabilités
+* La compromission de comptes utilisateurs
+
+### Classification
+
+Cette vulnérabilité correspond à un défaut de contrôle d'accès critique (Broken Access Control).
+
+---
+
+## 14. Prochaines étapes
+
+Les étapes suivantes consisteront à approfondir l'analyse des endpoints backend, notamment pour identifier d'autres failles de contrôle d'accès et explorer les données obtenues via `/rest/admin/application-configuration`.
 
 ---
