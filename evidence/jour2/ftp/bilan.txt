@@ -1,0 +1,7 @@
+=== BILAN FTP BYPASS ===
+Méthode utilisée : [noter ici]
+Fichiers obtenus :
+total 12
+drwxrwxr-x 2 kali kali 4096 Apr 14 19:19 .
+drwxrwxr-x 9 kali kali 4096 Apr 14 19:19 ..
+-rw-rw-r-- 1 kali kali   77 Apr 14 19:19 bilan.txt
