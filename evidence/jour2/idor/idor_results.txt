@@ -1,0 +1,16 @@
+=== IDOR sur /api/Users ===
+User 1 → HTTP 200 | admin@juice-sh.op
+User 2 → HTTP 200 | jim@juice-sh.op
+User 3 → HTTP 200 | bender@juice-sh.op
+User 4 → HTTP 200 | bjoern.kimminich@gmail.com
+User 5 → HTTP 200 | ciso@juice-sh.op
+User 6 → HTTP 200 | support@juice-sh.op
+User 7 → HTTP 200 | morty@juice-sh.op
+=== IDOR sur /rest/basket ===
+Basket 1 → HTTP 200 | 3 produits
+Basket 2 → HTTP 200 | 1 produits
+Basket 3 → HTTP 200 | 1 produits
+Basket 4 → HTTP 200 | 1 produits
+Basket 5 → HTTP 200 | 2 produits
+Basket 6 → HTTP 200 | 
+=== IDOR sur /rest/orders ===

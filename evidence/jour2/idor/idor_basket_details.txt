@@ -1,0 +1,10 @@
+=== Contenu panier admin (basket 1) ===
+UserId : 1
+  - Apple Juice (1000ml) x2 = 1.99€
+  - Orange Juice (1000ml) x3 = 2.99€
+  - Eggfruit Juice (500ml) x1 = 8.99€
+=== IDOR Write : ajouter produit dans panier admin ===
+{
+    "error": "You can order only up to 5 items of this product."
+}
+=== IDOR Write : modifier email user 1 avec token Bender ===
