@@ -1,0 +1,12 @@
+.
+quarantine
+acquisitions.md
+announcement_encrypted.md
+coupons_2013.md.bak
+eastere.gg
+encrypt.pyc
+incident-support.kdbx
+legal.md
+package-lock.json.bak
+package.json.bak
+suspicious_errors.yml
