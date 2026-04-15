@@ -1,0 +1,126 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@juice-sh.op",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "email": "jim@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 3,
+      "email": "bender@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 4,
+      "email": "bjoern.kimminich@gmail.com",
+      "role": "admin"
+    },
+    {
+      "id": 5,
+      "email": "ciso@juice-sh.op",
+      "role": "deluxe"
+    },
+    {
+      "id": 6,
+      "email": "support@juice-sh.op",
+      "role": "admin"
+    },
+    {
+      "id": 7,
+      "email": "morty@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 8,
+      "email": "mc.safesearch@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 9,
+      "email": "J12934@juice-sh.op",
+      "role": "admin"
+    },
+    {
+      "id": 10,
+      "email": "wurstbrot@juice-sh.op",
+      "role": "admin"
+    },
+    {
+      "id": 11,
+      "email": "amy@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 12,
+      "email": "bjoern@juice-sh.op",
+      "role": "admin"
+    },
+    {
+      "id": 13,
+      "email": "bjoern@owasp.org",
+      "role": "deluxe"
+    },
+    {
+      "id": 15,
+      "email": "accountant@juice-sh.op",
+      "role": "accounting"
+    },
+    {
+      "id": 16,
+      "email": "uvogin@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 17,
+      "email": "demo",
+      "role": "customer"
+    },
+    {
+      "id": 18,
+      "email": "john@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 19,
+      "email": "emma@juice-sh.op",
+      "role": "customer"
+    },
+    {
+      "id": 20,
+      "email": "stan@juice-sh.op",
+      "role": "deluxe"
+    }
+  ],
+  "baskets": [
+    {
+      "id": 1,
+      "owner": 1,
+      "count": 3
+    },
+    {
+      "id": 2,
+      "owner": 2,
+      "count": 1
+    },
+    {
+      "id": 3,
+      "owner": 3,
+      "count": 1
+    },
+    {
+      "id": 4,
+      "owner": 11,
+      "count": 1
+    },
+    {
+      "id": 5,
+      "owner": 16,
+      "count": 2
+    }
+  ]
+}

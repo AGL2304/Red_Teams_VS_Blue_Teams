@@ -1,0 +1,7 @@
+Using default input encoding: UTF-8
+Loaded 20 password hashes with no different salts (Raw-SHA256 [SHA256 128/128 SSE2 4x])
+Warning: poor OpenMP scalability for this hash type, consider --fork=4
+Will run 4 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+0g 0:00:00:03 DONE (2026-04-15 04:13) 0g/s 3696Kp/s 3696Kc/s 73934KC/s (454579)..*7¡Vamos!
+Session completed. 
