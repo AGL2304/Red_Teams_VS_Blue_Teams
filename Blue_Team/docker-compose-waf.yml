@@ -1,125 +1,30 @@
-
-# # docker-compose-waf.yml
-# # Déploie un reverse proxy Nginx/WAF devant Juice Shop
-# #
-# # Usage :
-# #   docker-compose -f docker-compose-waf.yml up -d
-# #   Juice Shop accessible via http://localhost:8080  (WAF actif)
-# #   Juice Shop brut toujours sur http://localhost:3000 (pour comparaison)
-
-# services:
-
-#   # ── Juice Shop (déjà existant, on ne le recrée pas) ─────────────────────────
-#   #juice-shop:
-#     #image: bkimminich/juice-shop
-#     #container_name: juice-shop-waf
-#     #ports:
-#       #- "3001:3000"   # accès direct (sans WAF) — laisser ouvert pour les tests
-#     #networks:
-#       #- juicenet
-#     #restart: unless-stopped
-
-#   # ── WAF — Nginx + ModSecurity devant Juice Shop ──────────────────────────────
-#   waf:
-#     image: owasp/modsecurity-crs:nginx-alpine
-#     container_name: juiceshop-waf
-#     ports:
-#       - "8080:80"   # accès protégé via WAF
-#     environment:
-#       # Backend = Juice Shop
-#       - BACKEND=http://juice-shop-waf:3000
-#       - PORT=8080
-#       # Mode bloquant
-#       - MODSEC_RULE_ENGINE=On
-#       - ANOMALY_INBOUND=5
-#       - ANOMALY_OUTBOUND=4
-#       # Désactiver règles CRS trop agressives sur Juice Shop (false positifs)
-#       - PARANOIA=1
-#     volumes:
-#       - ./nginx_waf.conf:/etc/nginx/nginx.conf:ro
-#       - ./modsecurity_juiceshop.conf:/etc/modsecurity.d/custom_juiceshop.conf:ro
-#       - waf_logs:/var/log/nginx
-#     networks:
-#       - juicenet
-#     depends_on:
-#       - juice-shop
-#     restart: unless-stopped
-
-#   # ── Filebeat — collecte les logs WAF vers ELK ─────────────────────────────────
-#   filebeat:
-#     image: docker.elastic.co/beats/filebeat:8.12.0
-#     container_name: filebeat
-#     user: root
-#     volumes:
-#       - waf_logs:/var/log/nginx:ro
-#       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-#     networks:
-#       - juicenet
-#     depends_on:
-#       - waf
-#     restart: unless-stopped
-
-#   # ── Elasticsearch ─────────────────────────────────────────────────────────────
-#   elasticsearch:
-#     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
-#     container_name: elasticsearch
-#     environment:
-#       - discovery.type=single-node
-#       - xpack.security.enabled=false
-#       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#     ports:
-#       - "9200:9200"
-#     volumes:
-#       - esdata:/usr/share/elasticsearch/data
-#     networks:
-#       - juicenet
-#     restart: unless-stopped
-
-#   # ── Kibana — dashboards SIEM ──────────────────────────────────────────────────
-#   kibana:
-#     image: docker.elastic.co/kibana/kibana:8.12.0
-#     container_name: kibana
-#     ports:
-#       - "5601:5601"
-#     environment:
-#       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-#     networks:
-#       - juicenet
-#     depends_on:
-#       - elasticsearch
-#     restart: unless-stopped
-
-# volumes:
-#   waf_logs:
-#   esdata:
-
-# networks:
-#   juicenet:
-#     external: true   # réseau Docker existant où tourne juice-shop
-#     name: juicenet
-
-
-
-
-
 services:
 
-  # ── WAF (ModSecurity + Nginx) ─────────────────────────────
+  # ── WAF (ModSecurity + Nginx) ─────────────────────────────────────────────
+  # FIX 1 : volumes ajoutés — nginx_waf.conf et modsecurity custom montés
+  # FIX 2 : listen 8080 dans nginx_waf.conf (port interne du container)
   waf:
     image: owasp/modsecurity-crs:nginx-alpine
     container_name: juice-waf
     ports:
-      - "8081:8080"   # IMPORTANT: port interne = 8080
+      - "8081:8080"   # port interne container = 8080
     environment:
       - BACKEND=http://juice-shop:3000
+      - MODSEC_RULE_ENGINE=On
+      - PARANOIA=1
+      - ANOMALY_INBOUND=5
+      - ANOMALY_OUTBOUND=4
+    volumes:
+      - ./nginx_waf.conf:/etc/nginx/nginx.conf:ro
+      - ./modsecurity_juiceshop.conf:/etc/modsecurity.d/custom_juiceshop.conf:ro
+      - waf_logs:/var/log/nginx
     networks:
       - juicenet
     depends_on:
-      - filebeat
+      - elasticsearch
     restart: unless-stopped
 
-
-  # ── Filebeat ───────────────────────────────────────────────
+  # ── Filebeat ──────────────────────────────────────────────────────────────
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.12.0
     container_name: filebeat
@@ -129,10 +34,11 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     networks:
       - juicenet
+    depends_on:
+      - elasticsearch
     restart: unless-stopped
 
-
-  # ── Elasticsearch ──────────────────────────────────────────
+  # ── Elasticsearch ─────────────────────────────────────────────────────────
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: elasticsearch
@@ -148,8 +54,7 @@ services:
       - juicenet
     restart: unless-stopped
 
-
-  # ── Kibana ────────────────────────────────────────────────
+  # ── Kibana ────────────────────────────────────────────────────────────────
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.0
     container_name: kibana
@@ -163,11 +68,9 @@ services:
       - elasticsearch
     restart: unless-stopped
 
-
 volumes:
   waf_logs:
   esdata:
-
 
 networks:
   juicenet:
