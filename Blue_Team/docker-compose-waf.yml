@@ -13,7 +13,6 @@ services:
       - ANOMALY_INBOUND=5
       - ANOMALY_OUTBOUND=4
     volumes:
-      - ./nginx_waf.conf:/etc/nginx/templates/nginx.conf.template:ro
       - ./modsecurity_juiceshop.conf:/etc/modsecurity.d/custom_juiceshop.conf:ro
       - waf_logs:/var/log/nginx
     networks:
@@ -30,6 +29,8 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     networks:
       - juicenet
+    depends_on:
+      - elasticsearch
     restart: unless-stopped
 
 
@@ -58,6 +59,8 @@ services:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     networks:
       - juicenet
+    depends_on:
+      - elasticsearch
     restart: unless-stopped
 
 
