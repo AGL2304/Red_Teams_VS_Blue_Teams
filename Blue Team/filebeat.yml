@@ -1,0 +1,43 @@
+# filebeat.yml — Collecte logs Nginx/WAF vers Elasticsearch
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/access.log
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      source: waf_access
+      app: juiceshop
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/error.log
+    fields:
+      source: waf_error
+      app: juiceshop
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/idor_attempts.log
+    json.keys_under_root: true
+    fields:
+      source: idor_monitor
+      app: juiceshop
+
+processors:
+  - add_fields:
+      target: ""
+      fields:
+        environment: lab
+        team: blueteam
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  index: "juiceshop-waf-%{+yyyy.MM.dd}"
+
+setup.ilm.enabled: false
+setup.template.name: "juiceshop-waf"
+setup.template.pattern: "juiceshop-waf-*"
