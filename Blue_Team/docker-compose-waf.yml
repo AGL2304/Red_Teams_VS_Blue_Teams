@@ -1,30 +1,26 @@
 services:
 
-  # ── WAF (ModSecurity + Nginx) ─────────────────────────────────────────────
-  # FIX 1 : volumes ajoutés — nginx_waf.conf et modsecurity custom montés
-  # FIX 2 : listen 8080 dans nginx_waf.conf (port interne du container)
   waf:
     image: owasp/modsecurity-crs:nginx-alpine
     container_name: juice-waf
     ports:
-      - "8081:8080"   # port interne container = 8080
+      - "8081:8080"
     environment:
       - BACKEND=http://juice-shop:3000
+      - PORT=8080
       - MODSEC_RULE_ENGINE=On
       - PARANOIA=1
       - ANOMALY_INBOUND=5
       - ANOMALY_OUTBOUND=4
     volumes:
-      - ./nginx_waf.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx_waf.conf:/etc/nginx/templates/nginx.conf.template:ro
       - ./modsecurity_juiceshop.conf:/etc/modsecurity.d/custom_juiceshop.conf:ro
       - waf_logs:/var/log/nginx
     networks:
       - juicenet
-    depends_on:
-      - elasticsearch
     restart: unless-stopped
 
-  # ── Filebeat ──────────────────────────────────────────────────────────────
+
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.12.0
     container_name: filebeat
@@ -34,18 +30,16 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     networks:
       - juicenet
-    depends_on:
-      - elasticsearch
     restart: unless-stopped
 
-  # ── Elasticsearch ─────────────────────────────────────────────────────────
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
     volumes:
@@ -54,7 +48,7 @@ services:
       - juicenet
     restart: unless-stopped
 
-  # ── Kibana ────────────────────────────────────────────────────────────────
+
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.0
     container_name: kibana
@@ -64,9 +58,8 @@ services:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     networks:
       - juicenet
-    depends_on:
-      - elasticsearch
     restart: unless-stopped
+
 
 volumes:
   waf_logs:
