@@ -109,7 +109,7 @@ services:
     image: owasp/modsecurity-crs:nginx-alpine
     container_name: juice-waf
     ports:
-      - "8080:80"   # accès via WAF
+      - "8081:80"   # accès via WAF
     environment:
       # Backend = Juice Shop EXISTANT
       - BACKEND=http://juice-shop:3000
