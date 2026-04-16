@@ -110,20 +110,6 @@ services:
     container_name: juice-waf
     ports:
       - "8081:80"   # accès via WAF
-    environment:
-      # Backend = Juice Shop EXISTANT
-      - BACKEND=http://juice-shop:3000
-      - PORT=80
-
-      # Mode WAF
-      - MODSEC_RULE_ENGINE=On
-      - ANOMALY_INBOUND=5
-      - ANOMALY_OUTBOUND=4
-      - PARANOIA=1
-    volumes:
-      - ./nginx_waf.conf:/etc/nginx/nginx.conf:ro
-      - ./modsecurity_juiceshop.conf:/etc/modsecurity.d/custom_juiceshop.conf:ro
-      - waf_logs:/var/log/nginx
     networks:
       - juicenet
     restart: unless-stopped
