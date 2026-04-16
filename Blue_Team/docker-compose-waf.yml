@@ -13,7 +13,7 @@ services:
   # ── Juice Shop (déjà existant, on ne le recrée pas) ─────────────────────────
   juice-shop:
     image: bkimminich/juice-shop
-    container_name: juice-shop
+    container_name: juice-shop-waf
     ports:
       - "3000:3000"   # accès direct (sans WAF) — laisser ouvert pour les tests
     networks:
