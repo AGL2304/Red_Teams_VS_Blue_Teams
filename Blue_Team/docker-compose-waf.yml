@@ -11,24 +11,24 @@ version: "3.8"
 services:
 
   # ── Juice Shop (déjà existant, on ne le recrée pas) ─────────────────────────
-  juice-shop:
-    image: bkimminich/juice-shop
-    container_name: juice-shop-waf
-    ports:
-      - "3001:3000"   # accès direct (sans WAF) — laisser ouvert pour les tests
-    networks:
-      - juicenet
-    restart: unless-stopped
+  #juice-shop:
+    #image: bkimminich/juice-shop
+    #container_name: juice-shop-waf
+    #ports:
+      #- "3001:3000"   # accès direct (sans WAF) — laisser ouvert pour les tests
+    #networks:
+      #- juicenet
+    #restart: unless-stopped
 
   # ── WAF — Nginx + ModSecurity devant Juice Shop ──────────────────────────────
   waf:
     image: owasp/modsecurity-crs:nginx-alpine
     container_name: juiceshop-waf
     ports:
-      - "8080:8080"   # accès protégé via WAF
+      - "8080:80"   # accès protégé via WAF
     environment:
       # Backend = Juice Shop
-      - BACKEND=http://juice-shop:3000
+      - BACKEND=http://juice-shop-waf:3000
       - PORT=8080
       # Mode bloquant
       - MODSEC_RULE_ENGINE=On
