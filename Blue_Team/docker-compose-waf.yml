@@ -104,18 +104,22 @@
 
 services:
 
-  # ── WAF — Nginx + ModSecurity devant Juice Shop ──────────────────────────────
+  # ── WAF (ModSecurity + Nginx) ─────────────────────────────
   waf:
     image: owasp/modsecurity-crs:nginx-alpine
     container_name: juice-waf
     ports:
-      - "8081:80"   # accès via WAF
+      - "8081:8080"   # IMPORTANT: port interne = 8080
+    environment:
+      - BACKEND=http://juice-shop:3000
     networks:
       - juicenet
+    depends_on:
+      - filebeat
     restart: unless-stopped
 
 
-  # ── Filebeat — logs WAF → ELK ────────────────────────────────────────────────
+  # ── Filebeat ───────────────────────────────────────────────
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.12.0
     container_name: filebeat
@@ -125,12 +129,10 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     networks:
       - juicenet
-    depends_on:
-      - waf
     restart: unless-stopped
 
 
-  # ── Elasticsearch ─────────────────────────────────────────────────────────────
+  # ── Elasticsearch ──────────────────────────────────────────
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: elasticsearch
@@ -147,7 +149,7 @@ services:
     restart: unless-stopped
 
 
-  # ── Kibana ────────────────────────────────────────────────────────────────────
+  # ── Kibana ────────────────────────────────────────────────
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.0
     container_name: kibana
