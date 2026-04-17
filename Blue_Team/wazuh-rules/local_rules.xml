@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group name="juice-shop,">
+  
+  <!-- ============================================================================
+       BLUE TEAM CUSTOM DETECTION RULES FOR OWASP JUICE SHOP
+       Detects common attack patterns and Red Team tactics
+       ============================================================================ -->
+
+  <!-- RULE 1: Brute Force Detection -->
+  <!-- Detects multiple failed login attempts from the same source -->
+  <rule id="100101" level="7">
+    <if_matched_sid>5503</if_matched_sid>
+    <same_source_ip />
+    <frequency>10</frequency>
+    <timeframe>120</timeframe>
+    <description>Brute force attack detected - Multiple login failures from same IP</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 2: Admin Panel Unauthorized Access -->
+  <!-- Detects attempts to access admin configuration endpoints -->
+  <rule id="100102" level="6">
+    <match>rest/admin/application-configuration|/admin</match>
+    <description>Admin panel access attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 3: SQL Injection Attempt -->
+  <!-- Detects common SQL injection patterns in query strings -->
+  <rule id="100103" level="8">
+    <match>' OR '|' OR 1=1|UNION SELECT|DROP TABLE|INSERT INTO|DELETE FROM|UPDATE |--</match>
+    <description>SQL Injection attack pattern detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 4: Path Traversal Attempt -->
+  <!-- Detects path traversal patterns in URLs -->
+  <rule id="100104" level="6">
+    <regex>.*\.\./.*|.*\.\.\\.*|.*%2e%2e.*</regex>
+    <description>Path traversal attack attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 5: XSS Injection Attempt -->
+  <!-- Detects script tags and other XSS payloads -->
+  <rule id="100105" level="6">
+    <match>&lt;script|javascript:|onerror=|onload=|alert(|eval(</match>
+    <description>XSS injection attack attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 6: API Endpoint Enumeration -->
+  <!-- Detects systematic API endpoint scanning/enumeration -->
+  <rule id="100106" level="5">
+    <match>/api/</match>
+    <same_source_ip />
+    <frequency>20</frequency>
+    <timeframe>60</timeframe>
+    <description>API endpoint enumeration detected - High frequency API calls</description>
+    <mitre>
+      <id>T1592</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 7: Insecure Direct Object Reference (IDOR) -->
+  <!-- Detects rapid sequential access to different resource IDs -->
+  <rule id="100107" level="6">
+    <regex>/(products|users|orders|reviews)/[0-9]+</regex>
+    <same_source_ip />
+    <frequency>5</frequency>
+    <timeframe>30</timeframe>
+    <description>Possible IDOR exploitation - Rapid sequential ID access detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 8: Broken Authentication - Weak Password Enum -->
+  <!-- Detects attempts with common weak passwords -->
+  <rule id="100108" level="5">
+    <match>password=admin|password=123456|password=password|password=root</match>
+    <description>Weak password authentication attempt detected</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 9: File Upload Exploitation -->
+  <!-- Detects suspicious file upload attempts -->
+  <rule id="100109" level="6">
+    <regex>upload.*\.php|upload.*\.exe|upload.*\.sh|upload.*\.bat|multipart/form-data.*\.php</regex>
+    <description>Suspicious file upload attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 10: Sensitive Data Exposure - Debug Info Probe -->
+  <!-- Detects attempts to access debug endpoints and information disclosure -->
+  <rule id="100110" level="5">
+    <match>/debug|/console|/whoami|/env|/config|/source</match>
+    <description>Attempt to access sensitive debug information detected</description>
+    <mitre>
+      <id>T1592</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 11: Blind SQL Injection Time-based Attack -->
+  <!-- Detects time-based SQL injection patterns with sleep/benchmark functions -->
+  <rule id="100111" level="7">
+    <match>SLEEP\(|BENCHMARK\(|WAITFOR DELAY|pg_sleep\(</match>
+    <description>Blind SQL Injection (time-based) attack attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 12: JSON-based Attack Payload -->
+  <!-- Detects malicious JSON payloads in request bodies -->
+  <rule id="100112" level="6">
+    <regex>\{.*"(exec|system|passthru|shell_exec)".*\}|\{.*\'OR\'.*\}</regex>
+    <description>Malicious JSON payload detected in request</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 13: Command Injection Attempt -->
+  <!-- Detects shell command injection payloads -->
+  <rule id="100113" level="7">
+    <match>; cat |; ls |; whoami|`whoami`|$(whoami)|&amp; powershell||| cmd.exe</match>
+    <description>Command injection attack attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 14: Session Fixation Attempt -->
+  <!-- Detects attempts to manipulate session cookies -->
+  <rule id="100114" level="5">
+    <match>Set-Cookie.*;|JSESSIONID=|PHPSESSID=|Set-Cookie:.*;</match>
+    <frequency>3</frequency>
+    <timeframe>30</timeframe>
+    <description>Session manipulation attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 15: Verification Bypass - 2FA/OTP Prediction -->
+  <!-- Detects rapid OTP/verification code attempts -->
+  <rule id="100115" level="6">
+    <match>/verify|/2fa|/otp|/challenge</match>
+    <same_source_ip />
+    <frequency>10</frequency>
+    <timeframe>60</timeframe>
+    <description>Verification bypass attempt - Rapid verification code attempts</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 16: XXE (XML External Entity) Injection -->
+  <!-- Detects XML External Entity injection patterns -->
+  <rule id="100116" level="7">
+    <match>&lt;?xml.*ENTITY|DOCTYPE.*SYSTEM|&lt;!ENTITY</match>
+    <description>XXE (XML External Entity) injection attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 17: CSRF Token Validation Bypass -->
+  <!-- Detects requests without proper CSRF tokens -->
+  <rule id="100117" level="4">
+    <match>POST|PUT|DELETE</match>
+    <field name="csrf_token">^$|missing|null</field>
+    <frequency>5</frequency>
+    <timeframe>300</timeframe>
+    <description>CSRF protection bypass attempt - Request without valid token</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 18: HTTP Response Smuggling -->
+  <!-- Detects malformed HTTP headers that could indicate smuggling attacks -->
+  <rule id="100118" level="6">
+    <regex>Content-Length.*[0-9]+.*Content-Length|Transfer-Encoding.*Transfer-Encoding</regex>
+    <description>HTTP response smuggling attack pattern detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 19: Prototype Pollution Attempt -->
+  <!-- Detects prototype pollution patterns in JavaScript/JSON-->
+  <rule id="100119" level="6">
+    <match>__proto__|constructor|prototype</match>
+    <description>Prototype pollution attack attempt detected</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+  <!-- RULE 20: Security Misconfiguration - Directory Listing -->
+  <!-- Detects enabled directory listing access -->
+  <rule id="100120" level="4">
+    <match>Index of /|Directory listing</match>
+    <description>Directory listing enabled - Security misconfiguration detected</description>
+    <mitre>
+      <id>T1526</id>
+    </mitre>
+  </rule>
+
+  <!-- AGGREGATED ALERT: Critical Attack Detected -->
+  <!-- Escalates any high-severity attack to critical level -->
+  <rule id="100201" level="9">
+    <if_matched_sid>100103, 100111, 100113, 100116</if_matched_sid>
+    <description>CRITICAL ATTACK DETECTED - Multiple severe vulnerabilities triggered</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+
+</group>
