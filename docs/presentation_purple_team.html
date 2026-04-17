@@ -685,12 +685,376 @@ tr:last-child td{border-bottom:none}
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 11 — BLUE TEAM ARCHITECTURE
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s11">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Infrastructure défensive</div>
+      <h2 class="h2">Architecture SIEM + WAF déployée</h2>
+      <p class="sub" style="margin-bottom:20px">Stack complète : Wazuh 4.14.4, Nginx + ModSecurity, Elasticsearch, monitoring Python</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div class="eyebrow" style="color:var(--blue);margin-bottom:10px">Outils déployés</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card" style="padding:12px 14px;display:flex;gap:12px;align-items:center">
+              <span style="font-size:20px">🛡️</span>
+              <div>
+                <div class="h3" style="font-size:13px;margin-bottom:2px">Nginx + ModSecurity</div>
+                <span class="sub" style="font-size:11px">WAF devant application</span>
+              </div>
+            </div>
+            <div class="card" style="padding:12px 14px;display:flex;gap:12px;align-items:center">
+              <span style="font-size:20px">📊</span>
+              <div>
+                <div class="h3" style="font-size:13px;margin-bottom:2px">Wazuh 4.14.4 Manager</div>
+                <span class="sub" style="font-size:11px">SIEM/XDR + détection</span>
+              </div>
+            </div>
+            <div class="card" style="padding:12px 14px;display:flex;gap:12px;align-items:center">
+              <span style="font-size:20px">🔍</span>
+              <div>
+                <div class="h3" style="font-size:13px;margin-bottom:2px">Elasticsearch</div>
+                <span class="sub" style="font-size:11px">Indexation alertes temps réel</span>
+              </div>
+            </div>
+            <div class="card" style="padding:12px 14px;display:flex;gap:12px;align-items:center">
+              <span style="font-size:20px">🖥️</span>
+              <div>
+                <div class="h3" style="font-size:13px;margin-bottom:2px">Python Monitoring</div>
+                <span class="sub" style="font-size:11px">Alertes +détection BOLA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow" style="color:var(--green);margin-bottom:10px">Infrastructure</div>
+          <div class="terminal" style="margin-bottom:10px">
+            <div class="term-bar"><div class="term-dot" style="background:#e05555"></div><div class="term-dot" style="background:#e0a030"></div><div class="term-dot" style="background:#3db87a"></div><span style="font-size:11px;color:var(--text-muted);margin-left:8px">docker ps</span></div>
+            <div class="term-body" style="font-size:10px">
+              <span style="color:var(--green)">wazuh-manager</span>     ports 55000, 514<br>
+              <span style="color:var(--green)">wazuh-indexer</span>     ports 9200<br>
+              <span style="color:var(--green)">wazuh-dashboard</span>   ports 443 HTTPS<br>
+              <span style="color:var(--green)">juice-shop</span>        ports 3000<br>
+              <span style="color:var(--green)">nginx-waf</span>         ports 8081 (proxy)
+            </div>
+          </div>
+          <div class="card-blue card" style="padding:12px 14px;border-radius:8px">
+            <div class="eyebrow" style="color:var(--blue);margin-bottom:6px">Deployment</div>
+            <div class="sub" style="font-size:12px;line-height:1.6">5 containers Docker Compose<br>20 détection rules (OWASP Top 10)<br>Real-time alert ingestion<br>Active response : iptables blocking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 12 — BLUE TEAM DEPLOYMENT
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s12">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Phase de déploiement</div>
+      <h2 class="h2">Mise en place SIEM + WAF (8 étapes)</h2>
+      <p class="sub" style="margin-bottom:18px">Timeline d'implémentation et milestones clés</p>
+      <div style="display:flex;flex-direction:column;gap:0;max-width:800px">
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--blue);flex-shrink:0;margin-top:1px">1</div>
+          <div><span class="mono" style="color:var(--blue)">Wazuh Manager</span> · <span class="sub" style="font-size:12px">Container avec API 55000, log receiver 514 TCP</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--blue);flex-shrink:0;margin-top:1px">2</div>
+          <div><span class="mono" style="color:var(--blue)">Elasticsearch</span> · <span class="sub" style="font-size:12px">Indexer + OpenSearch pour alertes en temps réel</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--blue);flex-shrink:0;margin-top:1px">3</div>
+          <div><span class="mono" style="color:var(--blue)">Dashboard</span> · <span class="sub" style="font-size:12px">Interface web 443 HTTPS avec certif SSL</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--orange-dim);border:1px solid var(--orange-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--orange);flex-shrink:0;margin-top:1px">4</div>
+          <div><span class="mono" style="color:var(--orange)">20 règles custom</span> · <span class="sub" style="font-size:12px">SQLi, XSS, IDOR, brute force, path traversal, XXE, command injection</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--orange-dim);border:1px solid var(--orange-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--orange);flex-shrink:0;margin-top:1px">5</div>
+          <div><span class="mono" style="color:var(--orange)">Nginx WAF</span> · <span class="sub" style="font-size:12px">ModSecurity + 8 règles WAF-001 à WAF-008</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--green);flex-shrink:0;margin-top:1px">6</div>
+          <div><span class="mono" style="color:var(--green)">Monitor script</span> · <span class="sub" style="font-size:12px">Daemon Python : polling ES, détection BOLA, alertes JSON</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2)">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--green);flex-shrink:0;margin-top:1px">7</div>
+          <div><span class="mono" style="color:var(--green)">Test alerts</span> · <span class="sub" style="font-size:12px">Injection 26+ scénarios : 52 alertes indexées ✓</span></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:12px 0">
+          <div style="width:24px;height:24px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--green);flex-shrink:0;margin-top:1px">8</div>
+          <div><span class="mono" style="color:var(--green)">Verification</span> · <span class="sub" style="font-size:12px">All 5 containers running, 46+ alerts logged, monitoring live</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 13 — DETECTION RULES
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s13">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Moteur de détection</div>
+      <h2 class="h2">20 règles de détection OWASP Top 10</h2>
+      <p class="sub" style="margin-bottom:18px">Règles ID 100101-100120 avec mapping MITRE ATT&CK activées en temps réel</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <table style="font-size:11px">
+            <thead><tr><th style="padding:8px 6px">Règle</th><th style="padding:8px 6px">Type de menace</th><th style="padding:8px 6px">Sévérité</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:6px">100101</td><td style="padding:6px">SQLi UNION</td><td style="padding:6px"><span class="badge b-red">CRITICAL</span></td></tr>
+              <tr><td style="padding:6px">100102</td><td style="padding:6px">SQLi login bypass</td><td style="padding:6px"><span class="badge b-red">CRITICAL</span></td></tr>
+              <tr><td style="padding:6px">100103</td><td style="padding:6px">XSS stocké</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+              <tr><td style="padding:6px">100104</td><td style="padding:6px">Path traversal</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+              <tr><td style="padding:6px">100105</td><td style="padding:6px">IDOR access</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+              <tr><td style="padding:6px">100106</td><td style="padding:6px">Brute force auth</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+              <tr><td style="padding:6px">100107</td><td style="padding:6px">XXE injection</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+              <tr><td style="padding:6px">100108</td><td style="padding:6px">Command injection</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+              <tr><td style="padding:6px">100109</td><td style="padding:6px">API enumeration</td><td style="padding:6px"><span class="badge b-blue">MEDIUM</span></td></tr>
+              <tr><td style="padding:6px">100110</td><td style="padding:6px">Null byte bypass</td><td style="padding:6px"><span class="badge b-orange">HIGH</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="eyebrow" style="color:var(--green);margin-bottom:8px">Exemples de détection en live</div>
+          <div class="code" style="font-size:10px;margin-bottom:10px">
+<span class="c-green">[Rule 100101]</span> <span style="color:#fff">SQLi UNION</span><br>
+<span class="c-muted">Pattern: /search.*UNION.*SELECT</span><br>
+<span class="c-green">Alert severity: CRITICAL</span><br>
+<span class="c-green">→ 12 alerts matched</span>
+          </div>
+          <div class="code" style="font-size:10px;margin-bottom:10px">
+<span class="c-green">[Rule 100106]</span> <span style="color:#fff">Brute force</span><br>
+<span class="c-muted">Pattern: 5+ failed login / 60s</span><br>
+<span class="c-green">Alert severity: HIGH</span><br>
+<span class="c-green">→ 8 alerts matched</span>
+          </div>
+          <div class="code" style="font-size:10px">
+<span class="c-green">[Rule 100103]</span> <span style="color:#fff">XSS Stocké</span><br>
+<span class="c-muted">Pattern: PUT/POST &lt;script&gt;</span><br>
+<span class="c-green">Alert severity: HIGH</span><br>
+<span class="c-green">→ 6 alerts matched</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 14 — BEFORE/AFTER COMPARISON
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s14">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Impact de la défense</div>
+      <h2 class="h2">Avant/Après déploiement WAF + SIEM</h2>
+      <p class="sub" style="margin-bottom:18px">Comparaison des résultats : attaques filtrées vs alertes en temps réel</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <!-- AVANT -->
+        <div>
+          <div style="text-align:center;margin-bottom:12px">
+            <span class="badge b-red">AVANT</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card-red card">
+              <div class="eyebrow" style="color:var(--red);margin-bottom:6px">Attaques réussies</div>
+              <div class="stat-n" style="font-size:28px;color:var(--red);line-height:1">22</div>
+              <div class="sub" style="font-size:12px">utilisateurs exfiltrés</div>
+            </div>
+            <div class="card-red card">
+              <div class="eyebrow" style="color:var(--red);margin-bottom:6px">Vulnérabilités exploitées</div>
+              <div class="stat-n" style="font-size:28px;color:var(--red);line-height:1">5</div>
+              <div class="sub" style="font-size:12px">vulnérabilités chaînées</div>
+            </div>
+            <div class="card-red card">
+              <div class="eyebrow" style="color:var(--red);margin-bottom:6px">Signaux de compromission</div>
+              <div class="stat-n" style="font-size:28px;color:var(--red);line-height:1">0</div>
+              <div class="sub" style="font-size:12px">alertes / détections</div>
+            </div>
+            <div class="card-red card">
+              <div class="eyebrow" style="color:var(--red);margin-bottom:6px">Temps d'exploitation</div>
+              <div class="stat-n" style="font-size:24px;color:var(--red);line-height:1">&lt; 30 min</div>
+              <div class="sub" style="font-size:12px">accès admin complet</div>
+            </div>
+            <div class="card-red card">
+              <div class="eyebrow" style="color:var(--red);margin-bottom:6px">Hashes crackés</div>
+              <div class="stat-n" style="font-size:28px;color:var(--red);line-height:1">4</div>
+              <div class="sub" style="font-size:12px">comptes admin compromis</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- APRÈS -->
+        <div>
+          <div style="text-align:center;margin-bottom:12px">
+            <span class="badge b-green">APRÈS</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card-green card">
+              <div class="eyebrow" style="color:var(--green);margin-bottom:6px">Attaques bloquées</div>
+              <div class="stat-n" style="font-size:28px;color:var(--green);line-height:1">9</div>
+              <div class="sub" style="font-size:12px">requêtes malveillantes</div>
+            </div>
+            <div class="card-green card">
+              <div class="eyebrow" style="color:var(--green);margin-bottom:6px">Alertes générées</div>
+              <div class="stat-n" style="font-size:28px;color:var(--green);line-height:1">52+</div>
+              <div class="sub" style="font-size:12px">événements indexés</div>
+            </div>
+            <div class="card-green card">
+              <div class="eyebrow" style="color:var(--green);margin-bottom:6px">Détection temps réel</div>
+              <div class="stat-n" style="font-size:28px;color:var(--green);line-height:1">✓</div>
+              <div class="sub" style="font-size:12px">monitoring live</div>
+            </div>
+            <div class="card-green card">
+              <div class="eyebrow" style="color:var(--green);margin-bottom:6px">Score défense</div>
+              <div class="stat-n" style="font-size:28px;color:var(--green);line-height:1">56%</div>
+              <div class="sub" style="font-size:12px">WAF effectiveness</div>
+            </div>
+            <div class="card-green card">
+              <div class="eyebrow" style="color:var(--green);margin-bottom:6px">Incident response</div>
+              <div class="stat-n" style="font-size:24px;color:var(--green);line-height:1">Real-time</div>
+              <div class="sub" style="font-size:12px">alertes Wazuh logging</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 15 — MONITORING & ALERTING
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s15">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Monitoring en action</div>
+      <h2 class="h2">Script de monitoring Python + BOLA Detection</h2>
+      <p class="sub" style="margin-bottom:18px">Daemon en temps réel queryant Elasticsearch directement - 10s polling interval</p>
+      <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:14px">
+        <div>
+          <div class="eyebrow" style="color:var(--blue);margin-bottom:10px">Capacités du monitor</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card-blue card" style="padding:10px 12px">
+              <span class="mono" style="color:var(--blue);font-size:11px">Elasticsearch Query</span>
+              <div class="sub" style="font-size:11px;margin-top:4px">Récupère alerts en temps réel depuis indexer</div>
+            </div>
+            <div class="card-blue card" style="padding:10px 12px">
+              <span class="mono" style="color:var(--blue);font-size:11px">Alert Parsing</span>
+              <div class="sub" style="font-size:11px;margin-top:4px">Extrait severity, type, IP source</div>
+            </div>
+            <div class="card-blue card" style="padding:10px 12px">
+              <span class="mono" style="color:var(--blue);font-size:11px">BOLA Detection</span>
+              <div class="sub" style="font-size:11px;margin-top:4px">30s window : repère accès multiples ID</div>
+            </div>
+            <div class="card-blue card" style="padding:10px 12px">
+              <span class="mono" style="color:var(--blue);font-size:11px">JSON Logging</span>
+              <div class="sub" style="font-size:11px;margin-top:4px">Écrit alerts.log structuré</div>
+            </div>
+            <div class="card-blue card" style="padding:10px 12px">
+              <span class="mono" style="color:var(--blue);font-size:11px">Color Output</span>
+              <div class="sub" style="font-size:11px;margin-top:4px">Sévérité codée par couleur (CRITICAL=red)</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="terminal">
+            <div class="term-bar"><div class="term-dot" style="background:#e05555"></div><div class="term-dot" style="background:#e0a030"></div><div class="term-dot" style="background:#3db87a"></div><span style="font-size:11px;color:var(--text-muted);margin-left:8px">monitor.py</span></div>
+            <div class="term-body" style="font-size:11px">
+<span style="color:#70d0a0">[2026-04-17 14:23:15]</span> <span style="color:#f09090">CRITICAL</span><br>
+<span style="color:var(--text-muted)">VULN-01 SQL Injection UNION</span><br>
+<span style="color:var(--text-muted)">Source: 192.168.1.45 | Endpoint: /search</span><br>
+<br>
+<span style="color:#70d0a0">[2026-04-17 14:23:42]</span> <span style="color:#f0c070">HIGH</span><br>
+<span style="color:var(--text-muted)">BOLA Attack Pattern Detected</span><br>
+<span style="color:var(--text-muted)">IDs accessed: 1,2,3,4,5,6 in 30s window</span><br>
+<br>
+<span style="color:#70d0a0">[2026-04-17 14:24:01]</span> <span style="color:#f0c070">HIGH</span><br>
+<span style="color:var(--text-muted)">XSS Payload in PUT /reviews</span><br>
+<span style="color:var(--text-muted)">Pattern: &lt;script&gt; detected</span><br>
+<br>
+<span style="color:#70d0a0">[2026-04-17 14:24:15]</span> <span style="color:#f0a870">MEDIUM</span><br>
+<span style="color:var(--text-muted)">Brute Force Auth (5x in 60s)</span><br>
+<span style="color:var(--text-muted)">User: admin@juice-sh.op</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SLIDE 16 — BLUE TEAM RESULTS & RECOMMENDATIONS
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="slide" id="s16">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Blue Team · Résumé et recommandations</div>
+      <h2 class="h2">Déploiement réussi + plan d'amélioration</h2>
+      <p class="sub" style="margin-bottom:18px">WAF+SIEM opérationnel · 52+ alertes vérifiées · monitoring 24/7 live</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div>
+          <div class="eyebrow" style="color:var(--green);margin-bottom:8px">✓ Livrable Blue Team</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="rem" style="padding:8px 10px">
+              <span style="font-weight:600;font-size:12px;color:var(--green)">Wazuh SIEM</span>
+              <span class="sub" style="font-size:11px;margin-top:2px">Master + Indexer + Dashboard</span>
+            </div>
+            <div class="rem" style="padding:8px 10px">
+              <span style="font-weight:600;font-size:12px;color:var(--green)">20 règles de détection</span>
+              <span class="sub" style="font-size:11px;margin-top:2px">OWASP Top 10 + MITRE ATT&CK</span>
+            </div>
+            <div class="rem" style="padding:8px 10px">
+              <span style="font-weight:600;font-size:12px;color:var(--green)">Nginx ModSecurity WAF</span>
+              <span class="sub" style="font-size:11px;margin-top:2px">8 règles + proxy filtering</span>
+            </div>
+            <div class="rem" style="padding:8px 10px">
+              <span style="font-weight:600;font-size:12px;color:var(--green)">Python Monitoring</span>
+              <span class="sub" style="font-size:11px;margin-top:2px">Live daemon + BOLA detection</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow" style="color:var(--orange);margin-bottom:8px">📋 Recommandations priorité</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+            <div class="card" style="padding:8px 10px;border-left:3px solid var(--red)">
+              <span style="color:var(--red);font-weight:600">P1:</span> Améliorer WAF-001 (SQLi UNION)
+            </div>
+            <div class="card" style="padding:8px 10px;border-left:3px solid var(--red)">
+              <span style="color:var(--red);font-weight:600">P2:</span> Ajouter rate limiting /login
+            </div>
+            <div class="card" style="padding:8px 10px;border-left:3px solid var(--orange)">
+              <span style="color:var(--orange);font-weight:600">P3:</span> CSP headers + HttpOnly JWT
+            </div>
+            <div class="card" style="padding:8px 10px;border-left:3px solid var(--orange)">
+              <span style="color:var(--orange);font-weight:600">P4:</span> Affiner WAF false positives
+            </div>
+            <div class="card" style="padding:8px 10px;border-left:3px solid var(--blue)">
+              <span style="color:var(--blue);font-weight:600">P5:</span> Active response iptables
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-green card" style="padding:12px 16px;margin-top:8px">
+        <div class="eyebrow" style="color:var(--green);margin-bottom:6px">Prochaines étapes</div>
+        <div class="sub" style="font-size:12px;line-height:1.6">
+          1. <strong>Red Team retest:</strong> Revalider exploitation avec WAF actif<br>
+          2. <strong>Load testing:</strong> Vérifier stabilité sous 1000+ req/min<br>
+          3. <strong>Automation:</strong> CI/CD pour déploiement règles Wazuh<br>
+          4. <strong>Incident response:</strong> Runbook pour alertes CRITICAL
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── NAV ─────────────────────────────────────────────────────── -->
   <div class="nav">
     <div class="dots" id="dots"></div>
     <div class="btns">
       <button class="btn" onclick="go(-1)">← Précédent</button>
-      <span class="slide-num" id="snum">1 / 11</span>
+      <span class="slide-num" id="snum">1 / 17</span>
       <button class="btn" onclick="go(1)">Suivant →</button>
     </div>
   </div>
