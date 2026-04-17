@@ -1,0 +1,148 @@
+nohup: ignoring input
+[94m[*] Connecting to Wazuh API at https://127.0.0.1:55000...[0m
+[94m[+] Successfully authenticated to Wazuh API[0m
+[94m[*] Starting alert monitoring (poll interval: 10s)[0m
+[94m[*] Logging alerts to: /home/sellak/Desktop/M1/U2/M1PPAW/Red_Teams_VS_Blue_Teams/Blue_Team/logs/alerts.log[0m
+
+
+================================================================================
+[94m[1m[2026-04-17T08:46:30.101+0000] INFO ALERT (Rule: 502)[0m
+================================================================================
+Description: Wazuh server started.
+Source IP:   Unknown
+Agent:       wazuh.manager
+
+================================================================================
+[93m[1m[2026-04-17T08:44:08.300232Z] MEDIUM ALERT (Rule: 100107)[0m
+================================================================================
+Description: Unknown
+Source IP:   Unknown
+Agent:       wazuh.manager
+
+================================================================================
+[94m[1m[2026-04-17T08:31:24.807+0000] INFO ALERT (Rule: 19009)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure sticky bit is set on all world-writable directories.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:23:12.857+0000] INFO ALERT (Rule: 19009)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure sticky bit is set on all world-writable directories.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:23:11.056+0000] INFO ALERT (Rule: 502)[0m
+================================================================================
+Description: Wazuh server started.
+Source IP:   Unknown
+Agent:       wazuh.manager
+
+================================================================================
+[92m[1m[2026-04-17T08:19:16.835+0000] LOW ALERT (Rule: 19003)[0m
+================================================================================
+Description: SCA summary: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Score less than 80% (52)
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[92m[1m[2026-04-17T08:19:05.939+0000] LOW ALERT (Rule: 19003)[0m
+================================================================================
+Description: SCA summary: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Score less than 80% (52)
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[92m[1m[2026-04-17T08:19:00.600+0000] LOW ALERT (Rule: 19003)[0m
+================================================================================
+Description: SCA summary: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Score less than 80% (53)
+Source IP:   Unknown
+Agent:       wazuh.manager
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.912+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure root is the only UID 0 account.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.902+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure password fields are not empty.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[93m[1m[2026-04-17T08:18:58.892+0000] MEDIUM ALERT (Rule: 19007)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure accounts in /etc/passwd use shadowed passwords.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.882+0000] INFO ALERT (Rule: 19009)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure sticky bit is set on all world-writable directories.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.872+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/gshadow- are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.862+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/gshadow are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.851+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/shadow- are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.841+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/shadow are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.831+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/group- are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.823+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/group are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.819+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/passwd- are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
+[94m[1m[2026-04-17T08:18:58.801+0000] INFO ALERT (Rule: 19008)[0m
+================================================================================
+Description: CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on /etc/passwd are configured.
+Source IP:   Unknown
+Agent:       wazuh-agent-ad7f6ffce373
+
+================================================================================
