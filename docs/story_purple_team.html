@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purple Team Storytelling — Juice Shop Security Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;
+  --surface:#0d1117;
+  --surface2:#131a24;
+  --border:#1b2535;
+  --border2:#243044;
+  --red:#e05555;
+  --red-dim:#3d1515;
+  --red-border:#6b2020;
+  --orange:#e07a30;
+  --orange-dim:#2e1a08;
+  --orange-border:#6b3810;
+  --green:#3db87a;
+  --green-dim:#082d1a;
+  --green-border:#0e5a33;
+  --blue:#4a9de0;
+  --blue-dim:#0b1e35;
+  --blue-border:#1a4a7a;
+  --purple:#8b6fe0;
+  --purple-dim:#1a1030;
+  --purple-border:#4a2fa0;
+  --text:#d4dce8;
+  --text-muted:#5a7090;
+  --text-dim:#3a4f65;
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --display:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:var(--sans);color:var(--text)}
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
+}
+
+.deck{width:100%;height:100vh;position:relative;overflow:hidden}
+
+.glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.06;pointer-events:none;transition:opacity 1s}
+.glow-r{width:600px;height:600px;background:var(--red);top:-200px;right:-200px}
+.glow-b{width:500px;height:500px;background:var(--blue);bottom:-200px;left:-100px}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:48px 72px;
+  opacity:0;transform:translateY(24px) scale(.98);
+  transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;overflow-y:auto;
+}
+.slide.active{opacity:1;transform:none;pointer-events:all}
+.slide.out{opacity:0;transform:translateY(-24px) scale(.98)}
+
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+.h1{font-family:var(--display);font-size:48px;font-weight:800;line-height:1.1;letter-spacing:-.5px;color:#e8f0fa}
+.h2{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.15;color:#e8f0fa;margin-bottom:6px}
+.h3{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.sub{font-size:14px;color:var(--text-muted);line-height:1.65}
+.mono{font-family:var(--mono);font-size:12px}
+
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+.card-red{background:var(--red-dim);border-color:var(--red-border)}
+.card-green{background:var(--green-dim);border-color:var(--green-border)}
+.card-blue{background:var(--blue-dim);border-color:var(--blue-border)}
+.card-purple{background:var(--purple-dim);border-color:var(--purple-border)}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.b-red{background:var(--red-dim);color:#f09090;border:1px solid var(--red-border)}
+.b-green{background:var(--green-dim);color:#70d0a0;border:1px solid var(--green-border)}
+.b-blue{background:var(--blue-dim);color:#80b8e8;border:1px solid var(--blue-border)}
+.b-purple{background:var(--purple-dim);color:#b0a0e8;border:1px solid var(--purple-border)}
+
+.stat{text-align:center;padding:18px 24px;background:var(--surface2);border:1px solid var(--border);border-radius:12px}
+.stat-n{font-family:var(--display);font-size:36px;font-weight:800;line-height:1}
+.stat-l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:6px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+td{padding:8px 10px;border-bottom:1px solid var(--border2);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .4s ease;z-index:200}
+
+.nav{position:fixed;bottom:24px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:100}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:6px;height:6px;border-radius:3px;background:var(--border2);cursor:pointer;transition:all .25s;border:none;padding:0}
+.dot.on{width:20px;background:var(--blue)}
+.btns{display:flex;gap:8px}
+.btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;padding:7px 20px;font-size:12px;font-family:var(--sans);transition:all .2s}
+.btn:hover{background:var(--border);color:var(--text)}
+.slide-num{font-family:var(--mono);font-size:11px;color:var(--text-dim);min-width:60px;text-align:center}
+
+.member{font-family:var(--mono);font-size:11px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text-muted)}
+
+.jira-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;font-size:12px}
+.jira-title{font-weight:600;color:var(--blue);margin-bottom:4px;font-family:var(--mono)}
+.jira-assignee{color:var(--text-muted);font-size:11px;margin-bottom:4px}
+.jira-status{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500}
+.status-todo{background:var(--red-dim);color:var(--red)}
+.status-inprogress{background:var(--orange-dim);color:#f0a870}
+.status-done{background:var(--green-dim);color:var(--green)}
+
+.timeline{display:flex;flex-direction:column;gap:12px}
+.timeline-item{display:flex;gap:12px;align-items:flex-start}
+.timeline-dot{width:16px;height:16px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:2px;border:2px solid var(--bg)}
+.timeline-content{padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;flex:1}
+.timeline-date{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:4px}
+.timeline-title{font-weight:600;color:var(--text);font-size:13px;margin-bottom:2px}
+.timeline-desc{font-size:12px;color:var(--text-muted)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<div class="deck" id="deck">
+  <div class="glow glow-r"></div>
+  <div class="glow glow-b"></div>
+
+  <!-- SLIDE 0 - TITRE STORYTELLING -->
+  <div class="slide active" id="s0">
+    <div style="text-align:center;max-width:800px">
+      <h1 class="h1" style="font-size:56px;margin-bottom:24px">📖 The Purple Team<br>Security Saga</h1>
+      <p class="sub" style="font-size:16px;margin-bottom:32px;line-height:1.8">
+        Comment une startup de jus en ligne<br>
+        s'est armée contre les cyberattaques<br>
+        en 4 jours intenses d'audit sécurité
+      </p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px">
+        <span class="member">ANANI Georges Lionel</span>
+        <span class="member">KOUAME Marc</span>
+        <span class="member">SELLAK Mohammed</span>
+        <span class="member">OUBENAZHA Rachid</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:500px;margin:0 auto">
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--purple)">4</div><div class="stat-l">Jours</div></div>
+        <div class="stat"><div class="stat-n" style="font-size:24px;color:var(--blue)">1</div><div class="stat-l">Mission</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 1 - LE CONTEXTE -->
+  <div class="slide" id="s1">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Le Contexte · Pourquoi Purple Team?</div>
+      <h2 class="h2">Juice Shop 🍊 — Une startup en danger</h2>
+      <p class="sub" style="margin-bottom:24px">Une histoire vraie (presque...)</p>
+      
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card-red card">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:24px">🚨</span>
+            <div>
+              <div class="h3" style="color:var(--red)">Le problème</div>
+              <div class="sub" style="font-size:13px">Juice Shop lancée 6 mois ago. Succès rapide : 15K utilisateurs. Mais... zéro sécurité. Les administrateurs demandent un audit ASAP.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-blue card">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:24px">❓</span>
+            <div>
+              <div class="h3" style="color:var(--blue)">Les questions</div>
+              <div class="sub" style="font-size:13px">Est-ce que l'app est vraiment vulnérable? Si oui, c'est quoi les risques? Comment on se défend?</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-purple card">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:24px">⚔️</span>
+            <div>
+              <div class="h3" style="color:var(--purple)">La solution</div>
+              <div class="sub" style="font-size:13px">Engager Purple Team — Red Team + Blue Team + Validation. En 4 jours on simule une vraie attaque ET on déploie les défenses.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 - LA MISSION -->
+  <div class="slide" id="s2">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">La Mission · Objectives</div>
+      <h2 class="h2">Triple objectif du Purple Team</h2>
+      <p class="sub" style="margin-bottom:24px">Red + Blue + Purple working together</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div class="card-red card" style="padding:16px">
+          <div class="eyebrow" style="color:var(--red);margin-bottom:8px">🔴 RED TEAM</div>
+          <div class="h3" style="font-size:14px;margin-bottom:6px">Attaquer</div>
+          <div class="sub" style="font-size:12px;line-height:1.5">
+            • Simuler attaques réalistes<br>
+            • Trouver toutes les vulns<br>
+            • Exploiter jusqu'au bout<br>
+            • Documenter chaque hack
+          </div>
+        </div>
+
+        <div class="card-blue card" style="padding:16px">
+          <div class="eyebrow" style="color:var(--blue);margin-bottom:8px">🔵 BLUE TEAM</div>
+          <div class="h3" style="font-size:14px;margin-bottom:6px">Défendre</div>
+          <div class="sub" style="font-size:12px;line-height:1.5">
+            • Déployer WAF<br>
+            • Installer SIEM<br>
+            • Détecter en real-time<br>
+            • Bloquer les attaques
+          </div>
+        </div>
+
+        <div class="card-purple card" style="padding:16px">
+          <div class="eyebrow" style="color:var(--purple);margin-bottom:8px">🟣 PURPLE</div>
+          <div class="h3" style="font-size:14px;margin-bottom:6px">Valider</div>
+          <div class="sub" style="font-size:12px;line-height:1.5">
+            • Tester les défenses<br>
+            • Mesurer l'efficacité<br>
+            • Évaluer la sécurité<br>
+            • Recommander des actions
+          </div>
+        </div>
+      </div>
+
+      <div class="card-purple card" style="margin-top:16px;padding:12px;border-width:2px">
+        <span style="font-weight:600;color:var(--purple)">Objectif final:</span>
+        <span class="sub" style="font-size:13px;margin-left:8px">Passer de 0% sécurité à prototype défensif en 4 jours</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 - RED TEAM JIRA -->
+  <div class="slide" id="s3">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Red Team · Jira Board</div>
+      <h2 class="h2">Sprint 1: Find & Exploit</h2>
+      <p class="sub" style="margin-bottom:18px">Tâches assignées et statut</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-height:500px;overflow-y:auto">
+        <div class="jira-card">
+          <div class="jira-title">RT-001: Reconnaissance</div>
+          <div class="jira-assignee">👤 ANANI Georges</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Nikto scan, endpoints mapping, headers enum</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-002: SQLi Recon</div>
+          <div class="jira-assignee">👤 KOUAME Marc</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">/search endpoint vulnerability found</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-003: SQLi UNION Exploit</div>
+          <div class="jira-assignee">👤 KOUAME Marc</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">22 users exfiltrated, MD5 hashes extracted</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-004: Login Bypass SQLi</div>
+          <div class="jira-assignee">👤 KOUAME Marc</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Admin access bypassed with '-- trick</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-005: IDOR Enumeration</div>
+          <div class="jira-assignee">👤 SELLAK Mohammed</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Users, baskets, orders accessible</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-006: FTP Bypass</div>
+          <div class="jira-assignee">👤 SELLAK Mohammed</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Null byte %2500 bypass, config files obtained</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-007: XSS Payload</div>
+          <div class="jira-assignee">👤 OUBENAZHA Rachid</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Session hijacking demo, JWT stolen</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-008: Password Cracking</div>
+          <div class="jira-assignee">👤 ANANI Georges</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">4 admin passwords cracked with John</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-009: Exploit Chain Doc</div>
+          <div class="jira-assignee">👤 SELLAK Mohammed</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Full attack flow documented</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">RT-010: Report Red Team</div>
+          <div class="jira-assignee">👤 ANANI Georges</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">5 critical vulns documented</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 - BLUE TEAM JIRA -->
+  <div class="slide" id="s4">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Blue Team · Jira Board</div>
+      <h2 class="h2">Sprint 2: Deploy & Defend</h2>
+      <p class="sub" style="margin-bottom:18px">Infrastructure défensive mises en place</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-height:500px;overflow-y:auto">
+        <div class="jira-card">
+          <div class="jira-title">BT-001: Wazuh Manager</div>
+          <div class="jira-assignee">👤 SELLAK Mohammed</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Container running, API 55000 ready</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-002: Elasticsearch</div>
+          <div class="jira-assignee">👤 SELLAK Mohammed</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Indexer deployed, 9200 port open</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-003: Dashboard Setup</div>
+          <div class="jira-assignee">👤 OUBENAZHA Rachid</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">HTTPS 443, SSL certs installed</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-004: Wazuh Rules</div>
+          <div class="jira-assignee">👤 OUBENAZHA Rachid</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">20 detection rules deployed (100101-100120)</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-005: Nginx WAF</div>
+          <div class="jira-assignee">👤 KOUAME Marc</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">ModSecurity + 8 rules configured</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-006: Python Monitoring</div>
+          <div class="jira-assignee">👤 SELLAK Mohammed</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Daemon running, BOLA detection active</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-007: Test Alerts</div>
+          <div class="jira-assignee">👤 KOUAME Marc</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">26 scenarios tested, 52 alerts indexed</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-008: Verification</div>
+          <div class="jira-assignee">👤 ANANI Georges</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">5 containers running, 46+ logs</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-009: Documentation</div>
+          <div class="jira-assignee">👤 ANANI Georges</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">Blue Team comprehensive guide written</div>
+        </div>
+
+        <div class="jira-card">
+          <div class="jira-title">BT-010: Report Blue Team</div>
+          <div class="jira-assignee">👤 OUBENAZHA Rachid</div>
+          <div class="jira-status status-done">✓ DONE</div>
+          <div class="sub" style="font-size:11px;margin-top:6px;color:var(--green)">56% WAF effectiveness documented</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 - TIMELINE GLOBALE -->
+  <div class="slide" id="s5">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Timeline · 4 Days Sprint</div>
+      <h2 class="h2">Chronologie du Purple Team</h2>
+      <p class="sub" style="margin-bottom:20px">Jour par jour</p>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--blue)"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">JOUR 1 — 13 avril</div>
+            <div class="timeline-title">Red Team: Reconnaissance</div>
+            <div class="timeline-desc">Nikto scans, endpoint enumeration, SQLi testing begins. First vulnerability found in /search endpoint.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--red)"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">JOUR 2 — 14 avril</div>
+            <div class="timeline-title">Red Team: Full Exploitation</div>
+            <div class="timeline-desc">All 5 vulnerabilities exploited. 22 users dumped. Password cracking completed. Admin access achieved in &lt;30 minutes.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--blue)"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">JOUR 3 — 15 avril</div>
+            <div class="timeline-title">Blue Team: Defenses Deployed</div>
+            <div class="timeline-desc">Wazuh SIEM + Elasticsearch + Dashboard installed. 20 detection rules configured. Nginx WAF activated with 8 security rules.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--purple)"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">JOUR 4 — 16 avril</div>
+            <div class="timeline-title">Purple Team: Validation & Testing</div>
+            <div class="timeline-desc">26+ attack scenarios replayed. 52 alerts generated & indexed. WAF effectiveness evaluated (56%). Reports finalized.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--green)"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">PRÉSENTATION</div>
+            <div class="timeline-title">Today: Findings & Recommendations</div>
+            <div class="timeline-desc">Présentez les résultats: vulnérabilités criticales trouvées, défenses déployées, recommandations pour amélioration.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 - DÉFIS & OBSTACLES -->
+  <div class="slide" id="s6">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Défis · Obstacles Rencontrés</div>
+      <h2 class="h2">Problèmes et Solutions</h2>
+      <p class="sub" style="margin-bottom:18px">What went wrong (and how we fixed it)</p>
+      
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-red card">
+          <div style="display:flex;gap:12px">
+            <span style="font-size:20px">⚠️</span>
+            <div>
+              <div class="h3" style="color:var(--red);font-size:14px">Défi 1: Pipeline d'alerte lent</div>
+              <div class="sub" style="font-size:12px;margin-top:4px"><strong>Problème:</strong> Les alertes mettaient 20-30 secondes à s'indexer.</div>
+              <div class="sub" style="font-size:12px"><strong>Solution:</strong> Créer un systeme d'injection directe Elasticsearch → alertes instantanées.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-red card">
+          <div style="display:flex;gap:12px">
+            <span style="font-size:20px">⚠️</span>
+            <div>
+              <div class="h3" style="color:var(--red);font-size:14px">Défi 2: Erreurs XML dans les règles</div>
+              <div class="sub" style="font-size:12px;margin-top:4px"><strong>Problème:</strong> Wazuh rejetait les règles avec erreurs d'encoding.</div>
+              <div class="sub" style="font-size:12px"><strong>Solution:</strong> Valider et corriger les fichiers XML, redémarrer le manager.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-orange card">
+          <div style="display:flex;gap:12px">
+            <span style="font-size:20px">⚠️</span>
+            <div>
+              <div class="h3" style="color:#f0a870;font-size:14px">Défi 3: Faux positifs WAF</div>
+              <div class="sub" style="font-size:12px;margin-top:4px"><strong>Problème:</strong> 44% de faux positifs (56% effectiveness).</div>
+              <div class="sub" style="font-size:12px"><strong>Solution:</strong> Affiner les regex et patterns pour réduire bruit.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-green card">
+          <div style="display:flex;gap:12px">
+            <span style="font-size:20px">✓</span>
+            <div>
+              <div class="h3" style="color:var(--green);font-size:14px">Défi 4 (RÉSOLU): Permissions Docker</div>
+              <div class="sub" style="font-size:12px;margin-top:4px"><strong>Problème:</strong> Permission denied sur fichiers certificats.</div>
+              <div class="sub" style="font-size:12px"><strong>Solution:</strong> chmod -R 777 avant suppression, puis cleanup.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 - RÉSULTATS FINAUX -->
+  <div class="slide" id="s7">
+    <div style="max-width:860px;width:100%">
+      <div class="eyebrow">Résultats · Impact</div>
+      <h2 class="h2">De zéro sécurité à défense active</h2>
+      <p class="sub" style="margin-bottom:20px">Comparaison avant/après en chiffres</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div class="card-red card" style="text-align:center;padding:20px;margin-bottom:12px">
+            <div class="eyebrow" style="color:var(--red)">AVANT Audit</div>
+            <div class="stat-n" style="font-size:32px;color:var(--red)">0%</div>
+            <div class="sub" style="font-size:13px">Sécurité</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="card">
+              <div class="stat-n" style="font-size:22px;color:var(--red)">5</div>
+              <div class="stat-l">Vulnérabilités</div>
+            </div>
+            <div class="card">
+              <div class="stat-n" style="font-size:22px;color:var(--red)">22</div>
+              <div class="stat-l">Comptes compromis</div>
+            </div>
+            <div class="card">
+              <div class="stat-n" style="font-size:22px;color:var(--red)">4</div>
+              <div class="stat-l">Admins hackés</div>
+            </div>
+            <div class="card">
+              <div class="stat-n" style="font-size:22px;color:var(--red)">0</div>
+              <div class="stat-l">Alertes</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card-green card" style="text-align:center;padding:20px;margin-bottom:12px">
+            <div class="eyebrow" style="color:var(--green)">APRÈS Audit</div>
+            <div class="stat-n" style="font-size:32px;color:var(--green)">56%</div>
+            <div class="sub" style="font-size:13px">Protection</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="card-green card">
+              <div class="stat-n" style="font-size:22px;color:var(--green)">9</div>
+              <div class="stat-l">Attaques bloquées</div>
+            </div>
+            <div class="card-green card">
+              <div class="stat-n" style="font-size:22px;color:var(--green)">52+</div>
+              <div class="stat-l">Alertes générées</div>
+            </div>
+            <div class="card-green card">
+              <div class="stat-n" style="font-size:22px;color:var(--green)">20</div>
+              <div class="stat-l">Règles actives</div>
+            </div>
+            <div class="card-green card">
+              <div class="stat-n" style="font-size:22px;color:var(--green)">✓</div>
+              <div class="stat-l">Monitoring 24/7</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-purple card" style="margin-top:16px;padding:12px;text-align:center">
+        <div class="h3" style="color:var(--purple);font-size:14px">Outcome</div>
+        <div class="sub" style="font-size:13px">Juice Shop a maintenant une infrastructure défensive testée & documentée. Prête pour production.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 - LEÇONS APPRISES -->
+  <div class="slide" id="s8">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Leçons Apprises · Lessons Learned</div>
+      <h2 class="h2">5 Key Takeaways</h2>
+      <p class="sub" style="margin-bottom:18px">Pour future projects</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card" style="padding:14px;border-left:4px solid var(--blue)">
+          <div class="h3" style="color:var(--blue);font-size:13px;margin-bottom:4px">1. Collaboration Red+Blue</div>
+          <div class="sub" style="font-size:12px">La vraie sécurité vient de l'attaque ET la défense ensemble. Red seul = pas de défense. Blue seul = pas de validation.</div>
+        </div>
+
+        <div class="card" style="padding:14px;border-left:4px solid var(--blue)">
+          <div class="h3" style="color:var(--blue);font-size:13px;margin-bottom:4px">2. Automatisation > Manual</div>
+          <div class="sub" style="font-size:12px">Les scripts d'injection d'alertes étaient critique pour quick testing. CI/CD speeds up iteration.</div>
+        </div>
+
+        <div class="card" style="padding:14px;border-left:4px solid var(--orange)">
+          <div class="h3" style="color:#f0a870;font-size:13px;margin-bottom:4px">3. Monitoring time-sensitive</div>
+          <div class="sub" style="font-size:12px">20-30 seconds latency = too slow for incident response. Direct Elasticsearch polling = instant alerts.</div>
+        </div>
+
+        <div class="card" style="padding:14px;border-left:4px solid var(--green)">
+          <div class="h3" style="color:var(--green);font-size:13px;margin-bottom:4px">4. Documentation crucial</div>
+          <div class="sub" style="font-size:12px">Без docs, ничего не работает. Tout doit être écrit: runbooks, règles, procedures.</div>
+        </div>
+
+        <div class="card" style="padding:14px;border-left:4px solid var(--purple)">
+          <div class="h3" style="color:var(--purple);font-size:13px;margin-bottom:4px">5. Iterative improvement</div>
+          <div class="sub" style="font-size:12px">56% effectiveness ≠ perfection. Mais c'est mieux que 0%. Improve progressively, not perfect at once.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 - RECOMMANDATIONS -->
+  <div class="slide" id="s9">
+    <div style="max-width:820px;width:100%">
+      <div class="eyebrow">Recommandations · Next Steps</div>
+      <h2 class="h2">Plan d'action 2026</h2>
+      <p class="sub" style="margin-bottom:18px">5 actions pour renforcer la sécurité</p>
+
+      <table style="width:100%">
+        <thead>
+          <tr>
+            <th>Priorité</th>
+            <th>Action</th>
+            <th>Impact</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge b-red">P1</span></td>
+            <td>Fix SQLi au code source</td>
+            <td>Critique</td>
+            <td>ASAP (1 semaine)</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-red">P1</span></td>
+            <td>Rate limiting /login</td>
+            <td>Critique</td>
+            <td>ASAP (2 jours)</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-orange">P2</span></td>
+            <td>JWT → HttpOnly cookies</td>
+            <td>Haute</td>
+            <td>Sprint 1 (2 semaines)</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-orange">P2</span></td>
+            <td>CSP headers</td>
+            <td>Haute</td>
+            <td>Sprint 1 (1 semaine)</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-blue">P3</span></td>
+            <td>Affiner WAF rules</td>
+            <td>Moyenne</td>
+            <td>Continu</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-blue">P3</span></td>
+            <td>Load testing SIEM</td>
+            <td>Moyenne</td>
+            <td>Sprint 2 (1 mois)</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-purple">P4</span></td>
+            <td>Incident response runbook</td>
+            <td>Moyenne</td>
+            <td>Sprint 2 (2 semaines)</td>
+          </tr>
+          <tr>
+            <td><span class="badge b-purple">P4</span></td>
+            <td>Purple team retesting Q3</td>
+            <td>Suivi</td>
+            <td>Q3 2026</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card-green card" style="margin-top:16px;padding:12px">
+        <strong style="color:var(--green)">Bottom line:</strong>
+        <span class="sub" style="font-size:13px;margin-left:8px">Implémenter P1 actions immediately. Refaire Purple Team en 6 mois pour validation.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NAVIGATION ─────────────────────────────────────────────── -->
+  <div class="nav">
+    <div class="dots" id="dots"></div>
+    <div class="btns">
+      <button class="btn" onclick="go(-1)">← Précédent</button>
+      <span class="slide-num" id="snum">1 / 10</span>
+      <button class="btn" onclick="go(1)">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0, locked = false;
+
+const dotsEl = document.getElementById('dots');
+slides.forEach((_,i)=>{
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' on':'');
+  d.onclick = ()=>goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function updateUI(){
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  document.getElementById('snum').textContent = (cur+1)+' / '+total;
+  document.getElementById('prog').style.width = ((cur+1)/total*100)+'%';
+}
+
+function goTo(n){
+  if(locked) return;
+  locked = true;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('out');
+  setTimeout(()=>{ slides[cur].classList.remove('out'); }, 500);
+  cur = (n+total)%total;
+  setTimeout(()=>{ slides[cur].classList.add('active'); updateUI(); locked=false; }, 50);
+}
+
+function go(d){ goTo(cur+d); }
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); go(1); }
+  if(e.key==='ArrowLeft'){ e.preventDefault(); go(-1); }
+  if(e.key==='Home') goTo(0);
+  if(e.key==='End')  goTo(total-1);
+});
+
+updateUI();
+</script>
+</body>
+</html>
